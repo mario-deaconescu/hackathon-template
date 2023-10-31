@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type IUser = {
+export type UserCreateModel = {
     name: string;
     email: string;
     password: string;

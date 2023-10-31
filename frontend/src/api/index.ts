@@ -8,5 +8,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { IUser } from './models/IUser';
+export type { UserCreateModel } from './models/UserCreateModel';
+export type { UserLoginModel } from './models/UserLoginModel';
 
-export { UsersService } from './services/UsersService';
+export { AuthService } from './services/AuthService';

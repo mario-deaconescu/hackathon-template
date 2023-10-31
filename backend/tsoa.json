@@ -5,10 +5,11 @@
     "src/**/*Controller.ts"
   ],
   "spec": {
-    "outputDirectory": "../frontend",
+    "outputDirectory": "./",
     "specVersion": 3
   },
   "routes": {
-    "routesDir": "src/routes"
+    "routesDir": "src/routes",
+    "authenticationModule": "./authentication.ts"
   }
 }

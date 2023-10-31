@@ -1,17 +1,15 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import './App.css'
-import {IUser, OpenAPI, UsersService} from "./api";
+import {OpenAPI} from "./api";
 
 function App() {
     OpenAPI.BASE = "http://localhost:8000";
-    const [user, setUser] = useState<IUser>();
     useEffect(() => {
-        UsersService.getUser("1").then(setUser);
+        //AuthService.getUser() pentru a verifica daca userul este logat
     }, []);
     return (
         <>
             <div>
-                {user?.name}
             </div>
         </>
     )

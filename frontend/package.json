@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint hackathon --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "codegen": "openapi --input ./swagger.json --output ./src/api --client fetch"
+    "codegen": "openapi --input ../backend/swagger.json --output ./src/api --client fetch"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -25,6 +25,7 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "openapi-typescript-codegen": "^0.25.0",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-mkcert": "^1.16.0"
   }
 }

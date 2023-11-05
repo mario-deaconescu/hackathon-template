@@ -51,12 +51,12 @@ export function RegisterRoutes(app: Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.get('/auth/getUser',
+        app.get('/auth/currentUser',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(AuthController)),
-            ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.getUser)),
+            ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.currentUser)),
 
-            function AuthController_getUser(request: any, response: any, next: any) {
+            function AuthController_currentUser(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
@@ -70,7 +70,7 @@ export function RegisterRoutes(app: Router) {
                 const controller = new AuthController();
 
 
-              const promise = controller.getUser.apply(controller, validatedArgs as any);
+              const promise = controller.currentUser.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

@@ -16,21 +16,21 @@ export class AuthService {
      * @returns any Ok
      * @throws ApiError
      */
-    public static getUser(): CancelablePromise<IUser> {
+    public static currentUser(): CancelablePromise<IUser> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/auth/getUser',
+            url: '/auth/currentUser',
         });
     }
 
     /**
      * @param requestBody
-     * @returns void
+     * @returns any Ok
      * @throws ApiError
      */
     public static login(
         requestBody: UserLoginModel,
-    ): CancelablePromise<void> {
+    ): CancelablePromise<IUser | null> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/auth/login',

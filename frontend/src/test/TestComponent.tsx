@@ -15,7 +15,6 @@ const TestComponent = () => {
     const {
         register,
         handleSubmit,
-        formState: {isValid, errors},
     } = useForm<FormValues>({
         criteriaMode: "all",
     });
@@ -29,8 +28,12 @@ const TestComponent = () => {
     return (
         <div>
             <h1>
-                Current user: {currentUser?.email ?? 'None'}
+                Current
+                user: {currentUser !== null ? (`Email: ${currentUser.email}, Name: ${currentUser.name}`) : 'None'}
             </h1>
+            <h2>
+                Roles: {currentUser !== null ? currentUser.roles.join(', ') : 'None'}
+            </h2>
             <form>
                 <input type="email" {...register("email", {
                     required: "Email is required",

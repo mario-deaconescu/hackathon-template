@@ -16,12 +16,19 @@
 					},
 					"password": {
 						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
 					"name",
 					"email",
-					"password"
+					"password",
+					"roles"
 				],
 				"type": "object",
 				"additionalProperties": false

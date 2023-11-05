@@ -16,6 +16,7 @@ export interface IUser {
     name: string;
     email: string;
     password: string;
+    roles: string[];
 }
 
 export interface IUserMethods {
@@ -45,6 +46,10 @@ const usersSchema = new Schema<IUser, UserModel, IUserMethods>({
         type: String,
         required: true,
     },
+    roles: {
+        type: [String],
+        default: ['member'],
+    }
 }, {timestamps: true});
 
 
@@ -59,7 +64,6 @@ usersSchema.pre(
 
 usersSchema.method('isValidPassword', async function (password: string) {
     const user = this;
-    console.log(user.password, password);
     return await bcrypt.compare(password, user.password);
 });
 

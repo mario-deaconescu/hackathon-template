@@ -7,7 +7,7 @@ const jwtSecret = process.env.JWT_SECRET || 'secret';
 
 export interface TokenPayload {
     email: string;
-    scopes: string[];
+    roles: string[];
 }
 
 export interface JwtRequest extends Request {
@@ -42,7 +42,7 @@ export function expressAuthentication(
                     } else {
                         // Check if JWT contains all required scopes
                         for (let scope of scopes ?? []) {
-                            if (!decoded.scopes.includes(scope)) {
+                            if (!payload.roles.includes(scope)) {
                                 reject({
                                     message: "JWT does not contain required scope.",
                                 });
@@ -60,7 +60,7 @@ export function expressAuthentication(
 export function createToken(user: IUser): string {
     const payload: TokenPayload = {
         email: user.email,
-        scopes: [],
+        roles: user.roles,
     };
     return sign(payload, jwtSecret, {expiresIn: '10 days'});
 }

@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, Draft} from "@reduxjs/toolkit";
-import {AuthService, IUser, UserLoginModel} from "../api";
+import {AuthService, IUser, UserCreateModel, UserLoginModel} from "../api";
 import ErrorHandler from "../errors/ErrorHandler.ts";
 
 const initialState = {
@@ -11,6 +11,13 @@ const login = createAsyncThunk(
     'user/login',
     async (info: UserLoginModel): Promise<IUser | null> => {
         return AuthService.login(info);
+    }
+);
+
+const signUp = createAsyncThunk(
+    'user/signUp',
+    async (info: UserCreateModel): Promise<IUser | null> => {
+        return AuthService.signup(info);
     }
 );
 
@@ -76,9 +83,20 @@ const userSlice = createSlice({
             setUserAction(state, null);
             ErrorHandler("Invalid login");
         });
+        builder.addCase(signUp.fulfilled, (state, action) => {
+            setUserAction(state, action.payload);
+        });
+        builder.addCase(signUp.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(signUp.rejected, (state) => {
+            state.isLoading = false;
+            setUserAction(state, null);
+            ErrorHandler("Invalid sign up");
+        });
     }
 });
 
-export {updateCurrentUser, signOut, login};
+export {updateCurrentUser, signOut, login, signUp};
 export const {setUser} = userSlice.actions;
 export default userSlice.reducer;

@@ -66,4 +66,21 @@ export class AuthService {
         });
     }
 
+    /**
+     * @param email
+     * @returns boolean Ok
+     * @throws ApiError
+     */
+    public static userExists(
+        email: string,
+    ): CancelablePromise<boolean> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/auth/exists/{email}',
+            path: {
+                'email': email,
+            },
+        });
+    }
+
 }

@@ -5,6 +5,7 @@ import LoginPage from "../auth/LoginPage.tsx";
 import TestComponent from "../test/TestComponent.tsx";
 import SignupPage from "../pages/SignupPage.tsx";
 import Welcome from "../pages/Welcome.tsx";
+import QuizesPage from "../pages/QuizesPage.tsx";
 
 type ExtendedRouteObject = Omit<RouteObject, 'children'> & {
     roles?: string[];

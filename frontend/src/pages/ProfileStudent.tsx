@@ -14,7 +14,7 @@ export default function ProfileStudent() {
         skills: [
             {
                 id: 1,
-                chapter: "Programarea calculatoarelor",
+                name: "Programarea calculatoarelor",
                 completed: 70,
                 percentage: 81.2,
                 chapters: [
@@ -40,7 +40,7 @@ export default function ProfileStudent() {
             },
             {
                 id: 3,
-                chapter: "Utilizarea Sistemelor de Operare",
+                name: "Utilizarea Sistemelor de Operare",
                 completed: 95,
                 percentage: 95.2,
                 chapters: [
@@ -53,7 +53,7 @@ export default function ProfileStudent() {
             },
             {
                 id: 4,
-                chapter: "Programarea calculatoarelor",
+                name: "Programarea calculatoarelor",
                 completed: 70,
                 percentage: 81.9,
                 chapters: [
@@ -66,7 +66,7 @@ export default function ProfileStudent() {
             },
             {
                 id: 5,
-                chapter: "Analiza Matematica",
+                name: "Analiza Matematica",
                 completed: 13,
                 percentage: 23.5,
                 chapters: [
@@ -117,8 +117,8 @@ export default function ProfileStudent() {
             ]
         }*/
         return (
-            <div className="m-5 border-medium rounded-lg bg-slate-700 lg: w-[80%] mx-auto" key={skill.chapter}>
-                <h3 className="text-center p-4 text-3xl">{skill.chapter}</h3>
+            <div className="m-5 border-medium rounded-lg bg-slate-700 lg: w-[80%] mx-auto" key={skill.name}>
+                <h3 className="text-center p-4 text-3xl">{skill.name}</h3>
                 <div className="border-slate-600 flex border-large rounded">
                     <div className="basis-1/2 text-center border border-slate-600 border-e-medium p-2 bg-slate-800">Total completed questions: {skill.completed}</div>
                     <div className="basis-1/2 text-center border border-slate-600 border-e-medium p-2 bg-slate-800">Average percentage: {skill.percentage}%</div>

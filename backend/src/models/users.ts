@@ -25,6 +25,7 @@ export interface IStudent extends IUser {
         id: string,
         date: Date,
     }[];
+    totalQuestions: number;
     subscribedCourses: string[];
 }
 
@@ -77,6 +78,10 @@ const studentsSchema = new Schema<IStudent, StudentModel, IUserMethods>({
             date: Date,
         }],
         default: [],
+    },
+    totalQuestions: {
+        type: Number,
+        default: 0,
     },
     subscribedCourses: {
         type: [String],

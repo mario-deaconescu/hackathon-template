@@ -11,12 +11,11 @@ const MainPage = () => {
         const all = routes
             .find((route) => route.id === 'app')?.children
             ?.find((route) => route.id === 'main')?.children
-            ?.filter((route) => route.id !== 'Profile' && route.id !== 'Default' && route.id !== 'Course');
-        if (currentUser?.type === 'Student') {
-            return all;
-        } else if (currentUser?.type === 'Teacher') {
-            return all?.filter((route) => route.id !== 'Quizes');
-        }
+            ?.filter((route) => {
+                console.log(route.type)
+                return route.type !== undefined && route.type.includes(currentUser?.type ?? '');
+            }) ?? [];
+        return all;
     }, [currentUser]);
     return (
         <div className="w-full h-full flex flex-col">

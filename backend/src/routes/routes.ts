@@ -153,9 +153,14 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"total":{"dataType":"double","required":true},"correct":{"dataType":"double","required":true},"chapter":{"dataType":"string","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ProfileStatistics": {
+    "SkillStatistics": {
         "dataType": "refAlias",
-        "type": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"chapters":{"dataType":"array","array":{"dataType":"refAlias","ref":"ChapterStatistics"},"required":true},"name":{"dataType":"string","required":true}}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"totalQuestions":{"dataType":"double","required":true},"totalCorrect":{"dataType":"double","required":true},"chapters":{"dataType":"array","array":{"dataType":"refAlias","ref":"ChapterStatistics"},"required":true},"name":{"dataType":"string","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StatisticsResponse": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"overallTotalQuestions":{"dataType":"double","required":true},"overallTotalCorrect":{"dataType":"double","required":true},"skillStatistics":{"dataType":"array","array":{"dataType":"refAlias","ref":"SkillStatistics"},"required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -238,6 +243,31 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.signupStudent.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/auth/signupRecruiter',
+            ...(fetchMiddlewares<RequestHandler>(AuthController)),
+            ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.signupRecruiter)),
+
+            function AuthController_signupRecruiter(request: any, response: any, next: any) {
+            const args = {
+                    user: {"in":"body","name":"user","required":true,"ref":"UserCreateModel"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new AuthController();
+
+
+              const promise = controller.signupRecruiter.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

@@ -1,5 +1,5 @@
 import {Body, Controller, Delete, Get, Post, Request, Route, Security, Tags} from "tsoa";
-import Users, {IStudent, IUser, Student, Teacher, UserCreateModel, UserLoginModel} from "../models/users";
+import Users, {IStudent, IUser, Recruiter, Student, Teacher, UserCreateModel, UserLoginModel} from "../models/users";
 import {createToken, JwtRequest} from "../../authentication";
 
 @Route("auth")
@@ -40,6 +40,19 @@ export class AuthController extends Controller {
     @Post("signupStudent")
     public async signupStudent(@Body() user: UserCreateModel): Promise<IStudent | void> {
         const newUser = new Student(user);
+        const savedUser = await newUser.save();
+        if (!savedUser) {
+            this.setStatus(500);
+            return;
+        }
+        this.setHeader('Set-Cookie', `jwt=${createToken(savedUser)}; HttpOnly; SameSite=None; Secure;`);
+        this.setStatus(202);
+        return savedUser;
+    }
+
+    @Post("signupRecruiter")
+    public async signupRecruiter(@Body() user: UserCreateModel): Promise<IUser | void> {
+        const newUser = new Recruiter(user);
         const savedUser = await newUser.save();
         if (!savedUser) {
             this.setStatus(500);

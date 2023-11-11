@@ -12,6 +12,10 @@ const DefaultPage = () => {
         return (
             <Navigate to='courses'/>
         );
+    } else if (currentUser?.type === 'Recruiter') {
+        return (
+            <Navigate to='recruit'/>
+        );
     }
     return (
         <div></div>

@@ -1,6 +1,7 @@
 import SignupUser from "../auth/SignupUser.tsx";
 import {useMemo} from "react";
 import SignupTeacher from "../auth/SignupTeacher.tsx";
+import SignupRecruiter from "../auth/SignupRecruiter.tsx";
 
 type Props = {
     type: string;
@@ -12,6 +13,8 @@ const SignupPage = ({type}: Props) => {
             return <SignupUser/>
         } else if (type === 'teacher') {
             return <SignupTeacher/>
+        } else if (type === 'recruiter') {
+            return <SignupRecruiter/>
         }
     }, [type]);
     return (

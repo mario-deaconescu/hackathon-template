@@ -12,11 +12,13 @@ import HomePage from "../pages/Homepage.tsx";
 import CoursesPage from "../pages/CoursesPage.tsx";
 import DefaultPage from "../pages/DefaultPage.tsx";
 import CoursePage from "../pages/CoursePage.tsx";
+import RecruitPage from "../pages/RecruitPage.tsx";
 
 type ExtendedRouteObject = Omit<RouteObject, 'children'> & {
     roles?: string[];
     auth?: boolean;
     children?: ExtendedRouteObject[];
+    type?: string[];
 }
 
 const rawRoutes: ExtendedRouteObject[] = [
@@ -46,6 +48,11 @@ const rawRoutes: ExtendedRouteObject[] = [
                 element: <SignupPage type={'teacher'}/>
             },
             {
+                path: 'signup/recruiter',
+                id: 'signup_recruiter',
+                element: <SignupPage type={'recruiter'}/>
+            },
+            {
                 id: 'main',
                 element: <MainPage/>,
                 children: [
@@ -57,6 +64,7 @@ const rawRoutes: ExtendedRouteObject[] = [
                     {
                         id: 'Quizes',
                         path: 'quizes',
+                        type: ['Student'],
                         element: <QuizesPage/>
                     },
                     {
@@ -72,8 +80,15 @@ const rawRoutes: ExtendedRouteObject[] = [
                     {
                         id: 'Courses',
                         path: 'courses',
+                        type: ['Teacher', 'Student'],
                         element: <CoursesPage/>
                     },
+                    {
+                        id: 'Recruit',
+                        path: 'recruit',
+                        type: ['Recruiter'],
+                        element: <RecruitPage/>
+                    }
                 ]
             },
             {

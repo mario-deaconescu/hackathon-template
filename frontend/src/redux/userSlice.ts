@@ -28,6 +28,13 @@ const signUpTeacher = createAsyncThunk(
     }
 );
 
+const signUpRecruiter = createAsyncThunk(
+    'user/signUpRecruiter',
+    async (info: UserCreateModel): Promise<IUser | null> => {
+        return AuthService.signupRecruiter(info);
+    }
+);
+
 
 const updateCurrentUser = createAsyncThunk(
     'user/updateCurrentUser',
@@ -113,9 +120,20 @@ const userSlice = createSlice({
             setUserAction(state, null);
             ErrorHandler("Invalid sign up");
         });
+        builder.addCase(signUpRecruiter.fulfilled, (state, action) => {
+            setUserAction(state, action.payload);
+        });
+        builder.addCase(signUpRecruiter.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(signUpRecruiter.rejected, (state) => {
+            state.isLoading = false;
+            setUserAction(state, null);
+            ErrorHandler("Invalid sign up");
+        });
     }
 });
 
-export {updateCurrentUser, signOut, login, signUpStudent, signUpTeacher};
+export {updateCurrentUser, signOut, login, signUpStudent, signUpTeacher, signUpRecruiter};
 export const {setUser} = userSlice.actions;
 export default userSlice.reducer;

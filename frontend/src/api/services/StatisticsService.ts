@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ProfileStatistics } from '../models/ProfileStatistics';
+import type { StatisticsResponse } from '../models/StatisticsResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -17,7 +17,7 @@ export class StatisticsService {
      */
     public static getUserStatistics(
         email: string,
-    ): CancelablePromise<ProfileStatistics> {
+    ): CancelablePromise<StatisticsResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/statistics/getUserStatistics',

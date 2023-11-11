@@ -36,6 +36,10 @@ export interface ITeacher extends IUser {
     courses: string[];
 }
 
+export interface IRecruiter extends IUser {
+
+}
+
 export interface IUserMethods {
     isValidPassword: (password: string) => Promise<boolean>;
 }
@@ -43,6 +47,7 @@ export interface IUserMethods {
 type UserModel = Model<IUser, {}, IUserMethods>;
 type StudentModel = Model<IStudent, {}, IUserMethods>;
 type TeacherModel = Model<ITeacher, {}, IUserMethods>;
+type RecruiterModel = Model<IRecruiter, {}, IUserMethods>;
 
 
 const usersSchema = new Schema<IUser, UserModel, IUserMethods>({
@@ -98,6 +103,8 @@ const studentsSchema = new Schema<IStudent, StudentModel, IUserMethods>({
 
 const teachersSchema = new Schema<ITeacher, TeacherModel, IUserMethods>({});
 
+const recruitersSchema = new Schema<IRecruiter, UserModel, IUserMethods>({});
+
 usersSchema.pre(
     'save',
     async function (next) {
@@ -117,6 +124,7 @@ const User = model<IUser, UserModel>('User', usersSchema);
 
 const Student = User.discriminator<IStudent, StudentModel>('Student', studentsSchema);
 const Teacher = User.discriminator<ITeacher, TeacherModel>('Teacher', teachersSchema);
+const Recruiter = User.discriminator<IRecruiter, RecruiterModel>('Recruiter', recruitersSchema);
 
 export default User;
-export {Student, Teacher};
+export {Student, Teacher, Recruiter};

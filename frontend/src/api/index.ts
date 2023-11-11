@@ -17,7 +17,8 @@ export type { ISkill } from './models/ISkill';
 export type { IStudent } from './models/IStudent';
 export type { ITeacher } from './models/ITeacher';
 export type { IUser } from './models/IUser';
-export type { ProfileStatistics } from './models/ProfileStatistics';
+export type { SkillStatistics } from './models/SkillStatistics';
+export type { StatisticsResponse } from './models/StatisticsResponse';
 export type { UserCreateModel } from './models/UserCreateModel';
 export type { UserLoginModel } from './models/UserLoginModel';
 

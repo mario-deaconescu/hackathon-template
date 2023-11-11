@@ -5,7 +5,10 @@
 
 import type { ChapterStatistics } from './ChapterStatistics';
 
-export type ProfileStatistics = Array<{
+export type SkillStatistics = {
+    totalQuestions: number;
+    totalCorrect: number;
     chapters: Array<ChapterStatistics>;
     name: string;
-}>;
+};
+

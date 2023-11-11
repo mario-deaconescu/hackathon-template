@@ -385,26 +385,57 @@
 				],
 				"type": "object"
 			},
-			"ProfileStatistics": {
-				"items": {
-					"properties": {
-						"chapters": {
-							"items": {
-								"$ref": "#/components/schemas/ChapterStatistics"
-							},
-							"type": "array"
-						},
-						"name": {
-							"type": "string"
-						}
+			"SkillStatistics": {
+				"properties": {
+					"totalQuestions": {
+						"type": "number",
+						"format": "double"
 					},
-					"required": [
-						"chapters",
-						"name"
-					],
-					"type": "object"
+					"totalCorrect": {
+						"type": "number",
+						"format": "double"
+					},
+					"chapters": {
+						"items": {
+							"$ref": "#/components/schemas/ChapterStatistics"
+						},
+						"type": "array"
+					},
+					"name": {
+						"type": "string"
+					}
 				},
-				"type": "array"
+				"required": [
+					"totalQuestions",
+					"totalCorrect",
+					"chapters",
+					"name"
+				],
+				"type": "object"
+			},
+			"StatisticsResponse": {
+				"properties": {
+					"overallTotalQuestions": {
+						"type": "number",
+						"format": "double"
+					},
+					"overallTotalCorrect": {
+						"type": "number",
+						"format": "double"
+					},
+					"skillStatistics": {
+						"items": {
+							"$ref": "#/components/schemas/SkillStatistics"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"overallTotalQuestions",
+					"overallTotalCorrect",
+					"skillStatistics"
+				],
+				"type": "object"
 			}
 		},
 		"securitySchemes": {}
@@ -501,6 +532,43 @@
 									"anyOf": [
 										{
 											"$ref": "#/components/schemas/IStudent"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserCreateModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/signupRecruiter": {
+			"post": {
+				"operationId": "SignupRecruiter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IUser"
 										},
 										{}
 									]
@@ -1209,7 +1277,7 @@
 								"schema": {
 									"anyOf": [
 										{
-											"$ref": "#/components/schemas/ProfileStatistics"
+											"$ref": "#/components/schemas/StatisticsResponse"
 										},
 										{}
 									]

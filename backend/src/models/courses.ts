@@ -15,6 +15,7 @@ export interface ICourseQuestion {
 }
 
 export interface ICourse {
+    _id: string;
     teacher: ITeacher;
     name: string;
     chapters: string[];

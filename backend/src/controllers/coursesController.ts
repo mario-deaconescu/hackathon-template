@@ -17,6 +17,7 @@ export class CourseController extends Controller {
         const courses = await Courses.find({_id: {$in: student.subscribedCourses}}).populate('teacher');
         return await Promise.all(courses.map(async (course): Promise<CourseWithSubscribers> => {
             return {
+                _id: course._id,
                 name: course.name,
                 content: course.content,
                 chapters: course.chapters,
@@ -27,12 +28,31 @@ export class CourseController extends Controller {
         }));
     }
 
+    @Get("get/{id}")
+    public async getCourse(id: string): Promise<CourseWithSubscribers | void> {
+        const course = await Courses.findById(id).populate('teacher');
+        if (!course) {
+            this.setStatus(404);
+            return;
+        }
+        return {
+            _id: course._id,
+            name: course.name,
+            content: course.content,
+            chapters: course.chapters,
+            questions: course.questions,
+            teacher: course.teacher,
+            subscribers: await Student.countDocuments({subscribedCourses: course._id}),
+        };
+    }
+
     @Post("find")
     public async find(@Body() body: { chapters: string[] }): Promise<CourseWithSubscribers[]> {
         console.log("Find", body.chapters);
         const courses = await Courses.find({chapters: {$in: body.chapters}}).populate('teacher');
         return await Promise.all(courses.map(async (course): Promise<CourseWithSubscribers> => {
             return {
+                _id: course._id,
                 name: course.name,
                 content: course.content,
                 chapters: course.chapters,
@@ -50,8 +70,7 @@ export class CourseController extends Controller {
             this.setStatus(403);
             return;
         }
-        const courseIds = await Courses.find({name: {$in: body.courses}});
-        student.subscribedCourses = [...new Set([...student.subscribedCourses, ...courseIds.map(course => course._id as unknown as string)])];
+        student.subscribedCourses = [...new Set([...student.subscribedCourses, ...body.courses])];
         await student.save();
     }
 
@@ -84,6 +103,7 @@ export class CourseController extends Controller {
         const courses = await Courses.find({teacher: teacher._id}).populate('teacher');
         return await Promise.all(courses.map(async (course): Promise<CourseWithSubscribers> => {
             return {
+                _id: course._id,
                 name: course.name,
                 content: course.content,
                 chapters: course.chapters,

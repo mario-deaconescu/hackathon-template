@@ -30,6 +30,23 @@ export class CourseService {
     }
 
     /**
+     * @param id
+     * @returns any Ok
+     * @throws ApiError
+     */
+    public static getCourse(
+        id: string,
+    ): CancelablePromise<CourseWithSubscribers> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/courses/get/{id}',
+            path: {
+                'id': id,
+            },
+        });
+    }
+
+    /**
      * @param requestBody
      * @returns CourseWithSubscribers Ok
      * @throws ApiError

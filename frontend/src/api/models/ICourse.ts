@@ -7,6 +7,7 @@ import type { ICourseQuestion } from './ICourseQuestion';
 import type { ITeacher } from './ITeacher';
 
 export type ICourse = {
+    _id: string;
     teacher: ITeacher;
     name: string;
     chapters: Array<string>;

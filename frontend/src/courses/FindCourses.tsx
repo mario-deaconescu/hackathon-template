@@ -17,6 +17,7 @@ import {Key, useCallback, useEffect, useState} from "react";
 import {CourseService, CourseWithSubscribers, SkillsService} from "../api";
 import {RootState} from "../redux/store.tsx";
 import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 const columns = [
     {uid: 'name', name: 'NAME'},
@@ -32,6 +33,7 @@ const FindCourses = () => {
     const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
     const [enrolling, setEnrolling] = useState(false);
     const currentUser = useSelector((state: RootState) => state.user.user);
+    const navigate = useNavigate();
     useEffect(() => {
         SkillsService.getAllSkills().then((response) => {
             setAvailableChapters(response.map((skill) => ({
@@ -101,7 +103,10 @@ const FindCourses = () => {
             {Array.from(chapters).length > 0 &&
                 <Table aria-label="Example table with custom cells" selectionMode="multiple"
                        selectedKeys={selectedKeys}
-                       onSelectionChange={setSelectedKeys}>
+                       onSelectionChange={setSelectedKeys}
+                       onRowAction={(key: Key) => {
+                           navigate(`/courses/${key}`)
+                       }}>
                     <TableHeader columns={columns}>
                         {(column) => (
                             <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
@@ -111,7 +116,7 @@ const FindCourses = () => {
                     </TableHeader>
                     <TableBody items={courses}>
                         {(item) => (
-                            <TableRow key={item.name}>
+                            <TableRow key={item._id}>
                                 {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                             </TableRow>
                         )}

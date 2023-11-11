@@ -204,6 +204,9 @@
 			},
 			"CourseWithSubscribers": {
 				"properties": {
+					"_id": {
+						"type": "string"
+					},
 					"teacher": {
 						"$ref": "#/components/schemas/ITeacher"
 					},
@@ -231,6 +234,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"teacher",
 					"name",
 					"chapters",
@@ -243,6 +247,9 @@
 			},
 			"ICourse": {
 				"properties": {
+					"_id": {
+						"type": "string"
+					},
 					"teacher": {
 						"$ref": "#/components/schemas/ITeacher"
 					},
@@ -266,6 +273,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"teacher",
 					"name",
 					"chapters",
@@ -355,6 +363,48 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ChapterStatistics": {
+				"properties": {
+					"total": {
+						"type": "number",
+						"format": "double"
+					},
+					"correct": {
+						"type": "number",
+						"format": "double"
+					},
+					"chapter": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"total",
+					"correct",
+					"chapter"
+				],
+				"type": "object"
+			},
+			"ProfileStatistics": {
+				"items": {
+					"properties": {
+						"chapters": {
+							"items": {
+								"$ref": "#/components/schemas/ChapterStatistics"
+							},
+							"type": "array"
+						},
+						"name": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"chapters",
+						"name"
+					],
+					"type": "object"
+				},
+				"type": "array"
 			}
 		},
 		"securitySchemes": {}
@@ -585,6 +635,42 @@
 					{
 						"in": "query",
 						"name": "email",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/courses/get/{id}": {
+			"get": {
+				"operationId": "GetCourse",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/CourseWithSubscribers"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Course"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
 						"required": true,
 						"schema": {
 							"type": "string"
@@ -1120,7 +1206,14 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ProfileStatistics"
+										},
+										{}
+									]
+								}
 							}
 						}
 					}

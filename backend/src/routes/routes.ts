@@ -92,6 +92,7 @@ const models: TsoaRoute.Models = {
     "CourseWithSubscribers": {
         "dataType": "refObject",
         "properties": {
+            "_id": {"dataType":"string","required":true},
             "teacher": {"ref":"ITeacher","required":true},
             "name": {"dataType":"string","required":true},
             "chapters": {"dataType":"array","array":{"dataType":"string"},"required":true},
@@ -105,6 +106,7 @@ const models: TsoaRoute.Models = {
     "ICourse": {
         "dataType": "refObject",
         "properties": {
+            "_id": {"dataType":"string","required":true},
             "teacher": {"ref":"ITeacher","required":true},
             "name": {"dataType":"string","required":true},
             "chapters": {"dataType":"array","array":{"dataType":"string"},"required":true},
@@ -144,6 +146,16 @@ const models: TsoaRoute.Models = {
             "chapters": {"dataType":"array","array":{"dataType":"string"},"required":true},
         },
         "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ChapterStatistics": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"total":{"dataType":"double","required":true},"correct":{"dataType":"double","required":true},"chapter":{"dataType":"string","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ProfileStatistics": {
+        "dataType": "refAlias",
+        "type": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"chapters":{"dataType":"array","array":{"dataType":"refAlias","ref":"ChapterStatistics"},"required":true},"name":{"dataType":"string","required":true}}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -325,6 +337,31 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.getSubscribedCourses.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/courses/get/:id',
+            ...(fetchMiddlewares<RequestHandler>(CourseController)),
+            ...(fetchMiddlewares<RequestHandler>(CourseController.prototype.getCourse)),
+
+            function CourseController_getCourse(request: any, response: any, next: any) {
+            const args = {
+                    id: {"in":"path","name":"id","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new CourseController();
+
+
+              const promise = controller.getCourse.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

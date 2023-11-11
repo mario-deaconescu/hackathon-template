@@ -11,6 +11,7 @@ import ProfileStudent from "../pages/ProfileStudent.tsx";
 import HomePage from "../pages/Homepage.tsx";
 import CoursesPage from "../pages/CoursesPage.tsx";
 import DefaultPage from "../pages/DefaultPage.tsx";
+import CoursePage from "../pages/CoursePage.tsx";
 
 type ExtendedRouteObject = Omit<RouteObject, 'children'> & {
     roles?: string[];
@@ -64,10 +65,15 @@ const rawRoutes: ExtendedRouteObject[] = [
                         element: <ProfileStudent/>
                     },
                     {
+                        id: 'Course',
+                        path: 'courses/:id',
+                        element: <CoursePage/>
+                    },
+                    {
                         id: 'Courses',
                         path: 'courses',
                         element: <CoursesPage/>
-                    }
+                    },
                 ]
             },
             {

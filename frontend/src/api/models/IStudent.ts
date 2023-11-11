@@ -13,7 +13,7 @@ export type IStudent = {
         date: string;
         id: string;
     }>;
-    totalQuestions: number;
+    totalQuestions: Record<string, number>;
     subscribedCourses: Array<string>;
 };
 

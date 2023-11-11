@@ -11,7 +11,7 @@ const MainPage = () => {
         const all = routes
             .find((route) => route.id === 'app')?.children
             ?.find((route) => route.id === 'main')?.children
-            ?.filter((route) => route.id !== 'Profile');
+            ?.filter((route) => route.id !== 'Profile' && route.id !== 'Default');
         if (currentUser?.type === 'Student') {
             return all;
         } else if (currentUser?.type === 'Teacher') {

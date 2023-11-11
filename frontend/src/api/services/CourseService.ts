@@ -14,12 +14,12 @@ export class CourseService {
 
     /**
      * @param email
-     * @returns ICourse Ok
+     * @returns CourseWithSubscribers Ok
      * @throws ApiError
      */
     public static getSubscribedCourses(
         email: string,
-    ): CancelablePromise<Array<ICourse>> {
+    ): CancelablePromise<Array<CourseWithSubscribers>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/courses/subscribedCourses',
@@ -30,19 +30,43 @@ export class CourseService {
     }
 
     /**
-     * @param chapters
-     * @returns ICourse Ok
+     * @param requestBody
+     * @returns CourseWithSubscribers Ok
      * @throws ApiError
      */
     public static find(
-        chapters: Array<string>,
-    ): CancelablePromise<Array<ICourse>> {
+        requestBody: {
+            chapters: Array<string>;
+        },
+    ): CancelablePromise<Array<CourseWithSubscribers>> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/courses/find',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * @param email
+     * @param requestBody
+     * @returns void
+     * @throws ApiError
+     */
+    public static enroll(
+        email: string,
+        requestBody: {
+            courses: Array<string>;
+        },
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/courses/enroll',
             query: {
-                'chapters': chapters,
+                'email': email,
             },
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 

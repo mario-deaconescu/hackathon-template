@@ -8,18 +8,51 @@ import {Controller} from "@tsoa/runtime";
 export class CourseController extends Controller {
 
     @Get("subscribedCourses")
-    public async getSubscribedCourses(@Query() email: string): Promise<ICourse[]> {
+    public async getSubscribedCourses(@Query() email: string): Promise<CourseWithSubscribers[]> {
         const student = await Student.findOne({email: email});
         if (!student) {
             this.setStatus(403);
             return [];
         }
-        return Courses.find({_id: {$in: student.subscribedCourses}}).populate('teacher');
+        const courses = await Courses.find({_id: {$in: student.subscribedCourses}}).populate('teacher');
+        return await Promise.all(courses.map(async (course): Promise<CourseWithSubscribers> => {
+            return {
+                name: course.name,
+                content: course.content,
+                chapters: course.chapters,
+                questions: course.questions,
+                teacher: course.teacher,
+                subscribers: await Student.countDocuments({subscribedCourses: course._id}),
+            };
+        }));
     }
 
-    @Get("find")
-    public async find(@Query() chapters: string[]): Promise<ICourse[]> {
-        return Courses.find({chapters: {$in: chapters}}).populate('teacher');
+    @Post("find")
+    public async find(@Body() body: { chapters: string[] }): Promise<CourseWithSubscribers[]> {
+        console.log("Find", body.chapters);
+        const courses = await Courses.find({chapters: {$in: body.chapters}}).populate('teacher');
+        return await Promise.all(courses.map(async (course): Promise<CourseWithSubscribers> => {
+            return {
+                name: course.name,
+                content: course.content,
+                chapters: course.chapters,
+                questions: course.questions,
+                teacher: course.teacher,
+                subscribers: await Student.countDocuments({subscribedCourses: course._id}),
+            };
+        }));
+    }
+
+    @Post("enroll")
+    public async enroll(@Body() body: { courses: string[] }, @Query() email: string): Promise<void> {
+        const student = await Student.findOne({email: email});
+        if (!student) {
+            this.setStatus(403);
+            return;
+        }
+        const courseIds = await Courses.find({name: {$in: body.courses}});
+        student.subscribedCourses = [...new Set([...student.subscribedCourses, ...courseIds.map(course => course._id as unknown as string)])];
+        await student.save();
     }
 
     @Post("create")
@@ -48,10 +81,14 @@ export class CourseController extends Controller {
             this.setStatus(403);
             return [];
         }
-        const courses = await Courses.find({teacher: teacher._id});
+        const courses = await Courses.find({teacher: teacher._id}).populate('teacher');
         return await Promise.all(courses.map(async (course): Promise<CourseWithSubscribers> => {
             return {
-                ...course,
+                name: course.name,
+                content: course.content,
+                chapters: course.chapters,
+                questions: course.questions,
+                teacher: course.teacher,
                 subscribers: await Student.countDocuments({subscribedCourses: course._id}),
             };
         }));

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Request, Route, Security, Tags } from "tsoa";
+import { Body, Query, Controller, Post, Get, Request, Route, Security, Tags } from "tsoa";
 import Questions, { IQuestion } from "../models/question";
 import Users, { Student, IStudent, IUser } from "../models/users";
 import { JwtRequest } from "../../authentication";
@@ -6,6 +6,30 @@ import { JwtRequest } from "../../authentication";
 @Route("questions")
 @Tags("Questions")
 export class QuestionsController extends Controller {
+
+    @Get("totalQuestions")
+    public async getTotalQuestions(
+        @Query() chapters: string[],
+        @Query() email: string
+    ): Promise<number> {
+        // Caută studentul pe baza emailului
+        const student = await Users.findOne({ email: email }) as IStudent;
+        if (!student) {
+            this.setStatus(404);
+            return 0; // sau orice altă gestionare a erorii
+        }
+
+        // Extrage ID-urile întrebărilor rezolvate
+        const completedQuestionIds = student.completedQuestions.map(q => q.id);
+
+        // Numără întrebările care nu sunt în completedQuestions
+        const totalQuestions = await Questions.countDocuments({
+            chapter: { $in: chapters },
+            _id: { $nin: completedQuestionIds }
+        });
+
+        return totalQuestions;
+    }
 
     @Get("{questionId}")
     public async getQuestion(questionId: string): Promise<IQuestion | void> {
@@ -42,6 +66,8 @@ export class QuestionsController extends Controller {
         //return questions;
 
     }
+
+   
     
 
     @Post("responseQuiz")
@@ -77,6 +103,8 @@ export class QuestionsController extends Controller {
 
         // Salvează modificările făcute asupra studentului
         await student.save();
+
+
 
         return results;
     }

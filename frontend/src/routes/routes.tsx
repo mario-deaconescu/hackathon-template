@@ -4,6 +4,7 @@ import RoleRoute from "./RoleRoute.tsx";
 import LoginPage from "../auth/LoginPage.tsx";
 import TestComponent from "../test/TestComponent.tsx";
 import SignupPage from "../pages/SignupPage.tsx";
+import Welcome from "../pages/Welcome.tsx";
 // import Welcome from "../pages/Welcome.tsx";
 
 type ExtendedRouteObject = Omit<RouteObject, 'children'> & {
@@ -47,7 +48,7 @@ const rawRoutes: ExtendedRouteObject[] = [
             {
                 id: 'Welcome',
                 path: 'welcome',
-                // element: <Welcome/>
+                element: <Welcome/>
             }
 
         ],

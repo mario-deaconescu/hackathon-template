@@ -48,6 +48,7 @@ const models: TsoaRoute.Models = {
             "roles": {"dataType":"array","array":{"dataType":"string"},"required":true},
             "type": {"dataType":"string","required":true},
             "completedQuestions": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"date":{"dataType":"datetime","required":true},"id":{"dataType":"string","required":true}}},"required":true},
+            "totalQuestions": {"dataType":"double","required":true},
             "subscribedCourses": {"dataType":"array","array":{"dataType":"string"},"required":true},
         },
         "additionalProperties": false,
@@ -289,15 +290,6 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-<<<<<<< HEAD
-        app.get('/questions/totalQuestions',
-            ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
-            ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.getTotalQuestions)),
-
-            function QuestionsController_getTotalQuestions(request: any, response: any, next: any) {
-            const args = {
-                    chapters: {"in":"query","name":"chapters","required":true,"dataType":"array","array":{"dataType":"string"}},
-=======
         app.get('/courses/subscribedCourses',
             ...(fetchMiddlewares<RequestHandler>(CourseController)),
             ...(fetchMiddlewares<RequestHandler>(CourseController.prototype.getSubscribedCourses)),
@@ -355,7 +347,6 @@ export function RegisterRoutes(app: Router) {
             function CourseController_create(request: any, response: any, next: any) {
             const args = {
                     model: {"in":"body","name":"model","required":true,"ref":"CourseCreateModel"},
->>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
                     email: {"in":"query","name":"email","required":true,"dataType":"string"},
             };
 
@@ -365,17 +356,36 @@ export function RegisterRoutes(app: Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-<<<<<<< HEAD
-                const controller = new QuestionsController();
-
-
-              const promise = controller.getTotalQuestions.apply(controller, validatedArgs as any);
-=======
                 const controller = new CourseController();
 
 
               const promise = controller.create.apply(controller, validatedArgs as any);
->>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/questions/totalQuestions',
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.getTotalQuestions)),
+
+            function QuestionsController_getTotalQuestions(request: any, response: any, next: any) {
+            const args = {
+                    chapters: {"in":"query","name":"chapters","required":true,"dataType":"array","array":{"dataType":"string"}},
+                    email: {"in":"query","name":"email","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new QuestionsController();
+
+
+              const promise = controller.getTotalQuestions.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

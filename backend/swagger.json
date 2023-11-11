@@ -92,6 +92,10 @@
 						},
 						"type": "array"
 					},
+					"totalQuestions": {
+						"type": "number",
+						"format": "double"
+					},
 					"subscribedCourses": {
 						"items": {
 							"type": "string"
@@ -105,12 +109,9 @@
 					"password",
 					"roles",
 					"type",
-<<<<<<< HEAD
-					"completedQuestions"
-=======
 					"completedQuestions",
+					"totalQuestions",
 					"subscribedCourses"
->>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -511,39 +512,25 @@
 				]
 			}
 		},
-<<<<<<< HEAD
-		"/questions/totalQuestions": {
-			"get": {
-				"operationId": "GetTotalQuestions",
-=======
 		"/courses/subscribedCourses": {
 			"get": {
 				"operationId": "GetSubscribedCourses",
->>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-<<<<<<< HEAD
-									"type": "number",
-									"format": "double"
-=======
 									"items": {
 										"$ref": "#/components/schemas/ICourse"
 									},
 									"type": "array"
->>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 								}
 							}
 						}
 					}
 				},
 				"tags": [
-<<<<<<< HEAD
-					"Questions"
-=======
 					"Course"
 				],
 				"security": [],
@@ -579,7 +566,6 @@
 				},
 				"tags": [
 					"Course"
->>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 				],
 				"security": [],
 				"parameters": [
@@ -593,9 +579,6 @@
 								"type": "string"
 							}
 						}
-<<<<<<< HEAD
-					},
-=======
 					}
 				]
 			}
@@ -625,7 +608,6 @@
 				],
 				"security": [],
 				"parameters": [
->>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 					{
 						"in": "query",
 						"name": "email",
@@ -634,9 +616,6 @@
 							"type": "string"
 						}
 					}
-<<<<<<< HEAD
-				]
-=======
 				],
 				"requestBody": {
 					"required": true,
@@ -648,7 +627,49 @@
 						}
 					}
 				}
->>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
+			}
+		},
+		"/questions/totalQuestions": {
+			"get": {
+				"operationId": "GetTotalQuestions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "number",
+									"format": "double"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Questions"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "chapters",
+						"required": true,
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					},
+					{
+						"in": "query",
+						"name": "email",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/questions/{questionId}": {

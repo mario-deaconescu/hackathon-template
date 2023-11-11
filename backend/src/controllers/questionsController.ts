@@ -83,6 +83,7 @@ export class QuestionsController extends Controller {
             return [];
         }
 
+        student.totalQuestions += body.responses.length;
         for (const response of body.responses) {
             const question = await Questions.findById(response.questionId);
 

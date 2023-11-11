@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { CourseCreateModel } from '../models/CourseCreateModel';
+import type { CourseWithSubscribers } from '../models/CourseWithSubscribers';
 import type { ICourse } from '../models/ICourse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -63,6 +64,23 @@ export class CourseService {
             },
             body: requestBody,
             mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * @param email
+     * @returns CourseWithSubscribers Ok
+     * @throws ApiError
+     */
+    public static myCourses(
+        email: string,
+    ): CancelablePromise<Array<CourseWithSubscribers>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/courses/myCourses',
+            query: {
+                'email': email,
+            },
         });
     }
 

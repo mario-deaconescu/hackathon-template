@@ -8,6 +8,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { CourseCreateModel } from './models/CourseCreateModel';
+export type { CourseWithSubscribers } from './models/CourseWithSubscribers';
 export type { ICourse } from './models/ICourse';
 export type { ICourseQuestion } from './models/ICourseQuestion';
 export type { IQuestion } from './models/IQuestion';

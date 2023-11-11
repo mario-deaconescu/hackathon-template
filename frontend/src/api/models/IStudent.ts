@@ -13,6 +13,7 @@ export type IStudent = {
         date: string;
         id: string;
     }>;
+    totalQuestions: number;
     subscribedCourses: Array<string>;
 };
 

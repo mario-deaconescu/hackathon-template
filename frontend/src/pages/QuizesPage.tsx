@@ -1,13 +1,16 @@
 import {useEffect, useMemo, useState} from "react";
-import {ISkill, SkillsService} from "../api";
+import {ISkill, QuestionsService, SkillsService} from "../api";
 import {Select, Selection, SelectItem} from "@nextui-org/react";
 import Quiz from "../quiz/Quiz.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/store.tsx";
 
 const QuizesPage = () => {
     const [skills, setSkills] = useState<ISkill[]>([]);
     const [selectedSkill, setSelectedSkill] = useState<ISkill | null>(null);
     const [selectedChapters, setSelectedChapters] = useState<Selection>(new Set([]));
     const [availableQuestions, setAvailableQuestions] = useState<number>(0);
+    const currentUser = useSelector((state: RootState) => state.user.user);
     useEffect(() => {
         SkillsService.getAllSkills().then((response) => {
             setSkills(response);
@@ -17,13 +20,15 @@ const QuizesPage = () => {
         console.log(selectedSkill);
     });
     useEffect(() => {
-        setAvailableQuestions(Array.from(selectedChapters).length * 10);
+        QuestionsService.getTotalQuestions(Array.from(selectedChapters) as string[], currentUser?.email ?? '').then((response) => {
+            setAvailableQuestions(response);
+        });
     }, [selectedChapters]);
     const selectSkill = (selection: Selection) => {
         setSelectedSkill(skills.find((skill) => skill.name == Array.from(selection)[0]) || null);
     }
     const quiz = useMemo(() => (
-        <Quiz chapters={Array.from(selectedChapters) as string[]} questionNumber={2}/>
+        <Quiz chapters={Array.from(selectedChapters) as string[]} questionNumber={Math.min(5, availableQuestions)}/>
     ), [selectedChapters]);
     return (
         <div className="w-full h-full p-10 overflow-y-auto">

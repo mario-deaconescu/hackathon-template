@@ -42,6 +42,8 @@ export class AuthController extends Controller {
             this.setStatus(500);
             return;
         }
+        this.setHeader('Set-Cookie', `jwt=${createToken(savedUser)}; HttpOnly; SameSite=None; Secure;`);
+        this.setStatus(202);
         return savedUser;
     }
 
@@ -49,6 +51,13 @@ export class AuthController extends Controller {
     public async logout(): Promise<void> {
         this.setHeader('Set-Cookie', `jwt=; HttpOnly; SameSite=None; Secure;`);
         this.setStatus(200);
+    }
+
+    @Get("exists/{email}")
+    public async userExists(email: string): Promise<boolean> {
+        // Check if user exists
+        const user = await Users.findOne({email: email});
+        return user !== null;
     }
 
 }

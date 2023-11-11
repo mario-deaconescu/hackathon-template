@@ -22,13 +22,17 @@
 							"type": "string"
 						},
 						"type": "array"
+					},
+					"type": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"name",
 					"email",
 					"password",
-					"roles"
+					"roles",
+					"type"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -66,6 +70,9 @@
 						},
 						"type": "array"
 					},
+					"type": {
+						"type": "string"
+					},
 					"completedQuestions": {
 						"items": {
 							"properties": {
@@ -91,6 +98,7 @@
 					"email",
 					"password",
 					"roles",
+					"type",
 					"completedQuestions"
 				],
 				"type": "object",
@@ -168,13 +176,7 @@
 				"additionalProperties": false
 			}
 		},
-		"securitySchemes": {
-			"api_key": {
-				"type": "apiKey",
-				"name": "jwt",
-				"in": "header"
-			}
-		}
+		"securitySchemes": {}
 	},
 	"info": {
 		"title": "backend",
@@ -339,7 +341,50 @@
 				]
 			}
 		},
-		"/questions/get/{questionId}": {
+		"/questions/totalQuestions": {
+			"get": {
+				"operationId": "GetTotalQuestions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "number",
+									"format": "double"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Questions"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "chapters",
+						"required": true,
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					},
+					{
+						"in": "query",
+						"name": "email",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/questions/{questionId}": {
 			"get": {
 				"operationId": "GetQuestion",
 				"responses": {

@@ -23,6 +23,7 @@ const models: TsoaRoute.Models = {
             "email": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
             "roles": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "type": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -43,6 +44,7 @@ const models: TsoaRoute.Models = {
             "email": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
             "roles": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "type": {"dataType":"string","required":true},
             "completedQuestions": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"date":{"dataType":"datetime","required":true},"id":{"dataType":"string","required":true}}},"required":true},
         },
         "additionalProperties": false,
@@ -208,6 +210,32 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.userExists.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/questions/totalQuestions',
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.getTotalQuestions)),
+
+            function QuestionsController_getTotalQuestions(request: any, response: any, next: any) {
+            const args = {
+                    chapters: {"in":"query","name":"chapters","required":true,"dataType":"array","array":{"dataType":"string"}},
+                    email: {"in":"query","name":"email","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new QuestionsController();
+
+
+              const promise = controller.getTotalQuestions.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

@@ -1,23 +1,41 @@
-import { Button, Image } from '@nextui-org/react'
+import { Button, Image, Link } from '@nextui-org/react'
 import HeroBg from '../../static-images/hero-bg.jpg'
 import React from 'react'
+import Layers from '../../static-images/layered-waves.svg'
 
 export default function Hero() {
   return (
-    <div className="w-screen h-screen relative overflow-hidden">
-        <img src={HeroBg} alt="hero background" className='object-cover w-full h-full blur-sm brightness-50'/>
-        <div className="w-[50%] h-[40%] absolute top-1/2 left-0 transform -translate-y-1/2 rounded-3xl rounded-s-none bg-slate-800 shadow-2xl border min-w-[600px] max-w-full">
-            <div className='text-slate-100 text-3xl p-10 bold text-center'>
-                4tzaPoliUnibuc
+    <div className="w-screen h-screen position relative">
+        <img src={Layers} alt="Layers" className="w-full absolute bottom-0 left-0 select-none z-10" />
+        <div className='flex flex-column h-full items-center justify-start'>
+            <div className="basis-1/2 text-white ps-8 z-20">
+                <h1 className='text-[2.5rem] font-thin'>We connect students, teachers and recruters</h1>
+                <h2 className="text-[2.7rem] font-bold font-mono">For a better <span className='bg-gradient-to-tr from-red-800 via-red-500 to-blue-300 bg-clip-text text-transparent'>future</span></h2>
+                <Button
+                    href="/login"
+                    as={Link}
+                    color="secondary"
+                    variant="solid"
+                    className='p-6 m-4 text-lg'
+                    >
+                    Login
+                </Button>
+                <Button
+                    href="/signup/student"
+                    as={Link}
+                    color="primary"
+                    variant="shadow"
+                    className='p-6 m-4 text-lg'
+                    >
+                    Stert Learning
+                </Button>
+                
             </div>
-            <hr/>
-            <div className="text-center text-slate-200 text-xl p-5">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea impedit accusantium voluptatum corrupti nisi soluta vitae non reiciendis dolores incidunt laboriosam, modi eligendi quam necessitatibus blanditiis eos explicabo assumenda cum atque voluptates illo dolore rem? Sunt rem molestiae, voluptate placeat minus in aut beatae expedita tempore similique repudiandae officiis mollitia?
+            <div className="basis-1/2 item-center h-full bg-red-500 relative">
+                <img src={HeroBg} alt="Hero Background" className="object-cover bottom-0 left-0 select-none h-full" />
+                <div className="w-full h-full absolute top-0 left-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-slate-900/25"></div>
             </div>
-            
         </div>
-        <Button color="success" variant="shadow" size="lg" className='absolute left-[80%] top-[80%] text-slate-50 text-2xl p-10' >Start Learning</Button>
-        <Button color="secondary" variant="shadow" size="lg" className='absolute right-[80%] top-[80%] text-slate-50 text-2xl p-10' >Login</Button>
     </div>
   )
 }

@@ -49,6 +49,40 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"IStudent": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"completedQuestions": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"email",
+					"password",
+					"roles",
+					"completedQuestions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UserCreateModel": {
 				"properties": {
 					"name": {
@@ -199,9 +233,9 @@
 				}
 			}
 		},
-		"/auth/signup": {
+		"/auth/signupStudent": {
 			"post": {
-				"operationId": "Signup",
+				"operationId": "SignupStudent",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -210,7 +244,7 @@
 								"schema": {
 									"anyOf": [
 										{
-											"$ref": "#/components/schemas/IUser"
+											"$ref": "#/components/schemas/IStudent"
 										},
 										{}
 									]
@@ -390,6 +424,70 @@
 						}
 					}
 				}
+			}
+		},
+		"/skills/all": {
+			"get": {
+				"operationId": "GetAllSkills",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ISkill"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/skills/{skillName}": {
+			"get": {
+				"operationId": "GetChapters",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"type": "string"
+											},
+											"type": "array"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "skillName",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},

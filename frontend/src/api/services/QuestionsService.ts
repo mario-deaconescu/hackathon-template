@@ -16,7 +16,7 @@ export class QuestionsService {
      * @throws ApiError
      */
     public static getQuestion(
-        questionId: number,
+        questionId: string,
     ): CancelablePromise<IQuestion> {
         return __request(OpenAPI, {
             method: 'GET',

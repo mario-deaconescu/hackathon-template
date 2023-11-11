@@ -36,6 +36,18 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IStudent": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
+            "password": {"dataType":"string","required":true},
+            "roles": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "completedQuestions": {"dataType":"array","array":{"dataType":"string"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserCreateModel": {
         "dataType": "refObject",
         "properties": {
@@ -127,11 +139,11 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/auth/signup',
+        app.post('/auth/signupStudent',
             ...(fetchMiddlewares<RequestHandler>(AuthController)),
-            ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.signup)),
+            ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.signupStudent)),
 
-            function AuthController_signup(request: any, response: any, next: any) {
+            function AuthController_signupStudent(request: any, response: any, next: any) {
             const args = {
                     user: {"in":"body","name":"user","required":true,"ref":"UserCreateModel"},
             };
@@ -145,7 +157,7 @@ export function RegisterRoutes(app: Router) {
                 const controller = new AuthController();
 
 
-              const promise = controller.signup.apply(controller, validatedArgs as any);
+              const promise = controller.signupStudent.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
@@ -270,6 +282,55 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.createSkill.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/skills/all',
+            ...(fetchMiddlewares<RequestHandler>(SkillsController)),
+            ...(fetchMiddlewares<RequestHandler>(SkillsController.prototype.getAllSkills)),
+
+            function SkillsController_getAllSkills(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new SkillsController();
+
+
+              const promise = controller.getAllSkills.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/skills/:skillName',
+            ...(fetchMiddlewares<RequestHandler>(SkillsController)),
+            ...(fetchMiddlewares<RequestHandler>(SkillsController.prototype.getChapters)),
+
+            function SkillsController_getChapters(request: any, response: any, next: any) {
+            const args = {
+                    skillName: {"in":"path","name":"skillName","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new SkillsController();
+
+
+              const promise = controller.getChapters.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

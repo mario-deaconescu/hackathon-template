@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { IStudent } from '../models/IStudent';
 import type { IUser } from '../models/IUser';
 import type { UserCreateModel } from '../models/UserCreateModel';
 import type { UserLoginModel } from '../models/UserLoginModel';
@@ -44,12 +45,12 @@ export class AuthService {
      * @returns any Ok
      * @throws ApiError
      */
-    public static signup(
+    public static signupStudent(
         requestBody: UserCreateModel,
-    ): CancelablePromise<IUser> {
+    ): CancelablePromise<IStudent> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/auth/signup',
+            url: '/auth/signupStudent',
             body: requestBody,
             mediaType: 'application/json',
         });

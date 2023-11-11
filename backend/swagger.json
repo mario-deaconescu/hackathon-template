@@ -168,7 +168,13 @@
 				"additionalProperties": false
 			}
 		},
-		"securitySchemes": {}
+		"securitySchemes": {
+			"api_key": {
+				"type": "apiKey",
+				"name": "jwt",
+				"in": "header"
+			}
+		}
 	},
 	"info": {
 		"title": "backend",
@@ -333,7 +339,7 @@
 				]
 			}
 		},
-		"/questions/{questionId}": {
+		"/questions/get/{questionId}": {
 			"get": {
 				"operationId": "GetQuestion",
 				"responses": {

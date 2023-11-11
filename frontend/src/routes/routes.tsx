@@ -8,6 +8,7 @@ import Welcome from "../pages/Welcome.tsx";
 import QuizesPage from "../pages/QuizesPage.tsx";
 import MainPage from "../layout/MainPage.tsx";
 import ProfileStudent from "../pages/ProfileStudent.tsx";
+import HomePage from "../pages/Homepage.tsx";
 
 type ExtendedRouteObject = Omit<RouteObject, 'children'> & {
     roles?: string[];
@@ -54,7 +55,7 @@ const rawRoutes: ExtendedRouteObject[] = [
                         id: 'Profile',
                         path: 'profile/student',
                         element: <ProfileStudent/>
-                    }
+                    },
                 ]
             },
             {
@@ -62,8 +63,11 @@ const rawRoutes: ExtendedRouteObject[] = [
                 path: 'welcome',
                 element: <Welcome/>
             }
-
         ],
+    },
+    {
+        path: '/home',
+        element: <HomePage/>,
     }
 ];
 

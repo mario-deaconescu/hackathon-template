@@ -17,6 +17,7 @@ export interface IUser {
     email: string;
     password: string;
     roles: string[];
+    type: string;
 }
 
 export interface IStudent extends IUser {

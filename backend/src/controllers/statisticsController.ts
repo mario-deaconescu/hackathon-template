@@ -9,32 +9,43 @@ type ChapterStatistics = {
     total: number;
 };
 
-type ProfileStatistics = {
+type SkillStatistics = {
     name: string;
     chapters: ChapterStatistics[];
-}[];
+    totalCorrect: number;
+    totalQuestions: number;
+};
+
+type ProfileStatistics = SkillStatistics[];
+
+type StatisticsResponse = {
+    skillStatistics: SkillStatistics[];
+    overallTotalCorrect: number;
+    overallTotalQuestions: number;
+};
 
 @Route("statistics")
 @Tags("Statistics")
 export class StatisticsController extends Controller {
     @Get("getUserStatistics")
-    public async getUserStatistics(@Query() email: string): Promise<ProfileStatistics | void> {
+    public async getUserStatistics(@Query() email: string): Promise<StatisticsResponse | void> {
         const student = await Student.findOne({email: email});
         if (!student) {
             this.setStatus(404);
             return;
         }
 
-        let skillStatistics: {
-            name: string;
-            chapters: ChapterStatistics[];
-        }[] = [];
+        let overallTotalCorrect = 0;
+        let overallTotalQuestions = 0;
+        let skillStatistics: SkillStatistics[] = [];
 
         const skills = await Skills.find();
         for (const skill of skills) {
             let skillStat = {
                 name: skill.name,
-                chapters: [] as ChapterStatistics[]
+                chapters: [] as ChapterStatistics[],
+                totalCorrect: 0,
+                totalQuestions: 0
             };
 
             for (const chapter of skill.chapters) {
@@ -51,17 +62,25 @@ export class StatisticsController extends Controller {
 
                     //if (totalAnswers > 0) {
                     skillStat.chapters.push({chapter: chapter, correct: correctAnswers, total: student.totalQuestions[chapter]});
+                    skillStat.totalCorrect += correctAnswers;
+                    skillStat.totalQuestions += student.totalQuestions[chapter];
                     //}
                 }
             }
 
             if (skillStat.chapters.length > 0) {
                 skillStatistics.push(skillStat);
+                overallTotalCorrect  += skillStat.totalCorrect;
+                overallTotalQuestions += skillStat.totalQuestions;
             }
 
 
         }
 
-        return skillStatistics;
+        return {
+            skillStatistics: skillStatistics,
+            overallTotalCorrect: overallTotalCorrect,
+            overallTotalQuestions: overallTotalQuestions
+        };
     }
 }

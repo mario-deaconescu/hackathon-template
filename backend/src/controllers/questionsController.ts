@@ -70,43 +70,54 @@ export class QuestionsController extends Controller {
    
     
 
+    
     @Post("responseQuiz")
-    public async responseQuiz(
-        @Body() body: { email: string, responses: Array<{ questionId: string, answer: number }> }
-    ): Promise<Array<{ questionId: string, isCorrect: boolean, correctAnswer: number }>> {
-        let results = [];
+public async responseQuiz(
+    @Body() body: { email: string, responses: Array<{ questionId: string, answer: number }> }
+): Promise<Array<{ questionId: string, isCorrect: boolean, correctAnswer: number }>> {
+    let results = [];
 
-        // Obține studentul bazat pe email
-        const student = await Student.findOne({ email: body.email });
-        if (!student) {
-            this.setStatus(404); // sau orice altă gestionare a erorii
-            return [];
-        }
+    // Obține studentul bazat pe email
+    const student = await Student.findOne({ email: body.email });
+    if (!student) {
+        this.setStatus(404);
+        return [];
+    }
 
-        student.totalQuestions += body.responses.length;
-        for (const response of body.responses) {
-            const question = await Questions.findById(response.questionId);
+    for (const response of body.responses) {
+        const question = await Questions.findById(response.questionId);
 
-            if (question) {
-                const isCorrect = question.correctAnswer === response.answer;
-                results.push({
-                    questionId: response.questionId,
-                    isCorrect: isCorrect,
-                    correctAnswer: question.correctAnswer
-                });
+        if (question) {
+            const isCorrect = question.correctAnswer === response.answer;
+            results.push({
+                questionId: response.questionId,
+                isCorrect: isCorrect,
+                correctAnswer: question.correctAnswer
+            });
 
-                // Adaugă la completedQuestions dacă răspunsul este corect
-                if (isCorrect) {
-                    student.completedQuestions.push({id: response.questionId, date: new Date()});
-                }
+            // Inițializează contorul pentru capitol dacă nu există
+            const chapter = question.chapter;
+            if (!student.totalQuestions[chapter]) {
+                student.totalQuestions[chapter] = 0;
+            }
+
+            // Actualizează contorul pentru capitol
+            student.totalQuestions[chapter]++;
+
+            // Adaugă la completedQuestions dacă răspunsul este corect
+            if (isCorrect) {
+                student.completedQuestions.push({id: response.questionId, date: new Date()});
             }
         }
-
-        // Salvează modificările făcute asupra studentului
-        await student.save();
-
-
-
-        return results;
     }
+
+    // Marchează câmpul totalQuestions ca fiind modificat
+    student.markModified('totalQuestions');
+
+    // Salvează modificările făcute asupra studentului
+    await student.save();
+
+    return results;
+}
+
 }

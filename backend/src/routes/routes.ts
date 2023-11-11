@@ -48,7 +48,7 @@ const models: TsoaRoute.Models = {
             "roles": {"dataType":"array","array":{"dataType":"string"},"required":true},
             "type": {"dataType":"string","required":true},
             "completedQuestions": {"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"date":{"dataType":"datetime","required":true},"id":{"dataType":"string","required":true}}},"required":true},
-            "totalQuestions": {"dataType":"double","required":true},
+            "totalQuestions": {"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"double"},"required":true},
             "subscribedCourses": {"dataType":"array","array":{"dataType":"string"},"required":true},
         },
         "additionalProperties": false,

@@ -93,8 +93,12 @@
 						"type": "array"
 					},
 					"totalQuestions": {
-						"type": "number",
-						"format": "double"
+						"properties": {},
+						"additionalProperties": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "object"
 					},
 					"subscribedCourses": {
 						"items": {

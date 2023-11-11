@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, Request, Route, Security, Tags } from "tsoa";
+import { Body, Controller, Post, Get, Request, Route, Security, Tags } from "tsoa";
 import Questions, { IQuestion } from "../models/question";
-import Users, { Student, IStudent } from "../models/users";
+import Users, { Student, IStudent, IUser } from "../models/users";
 import { JwtRequest } from "../../authentication";
 
 @Route("questions")
@@ -42,19 +42,19 @@ export class QuestionsController extends Controller {
         //return questions;
 
     }
+    
 
     @Post("responseQuiz")
-    @Security("jwt") // Asigură-te că acest decorator este utilizat corect
-    public async responseQuiz(@Request() request: JwtRequest, @Body() body: { responses: Array<{ questionId: string, answer: number }> }): Promise<Array<{ questionId: string, isCorrect: boolean, correctAnswer: number }>> {
+    public async responseQuiz(
+        @Body() body: { email: string, responses: Array<{ questionId: string, answer: number }> }
+    ): Promise<Array<{ questionId: string, isCorrect: boolean, correctAnswer: number }>> {
         let results = [];
 
-        // Obține studentul curent
-        console.log(request.user.email);
-        const student = await Student.findOne({ email: request.user.email });
-        console.log(student?.email);
+        // Obține studentul bazat pe email
+        const student = await Student.findOne({ email: body.email });
         if (!student) {
-            this.setStatus(401); // sau orice altă gestionare a erorii
-            return []; 
+            this.setStatus(404); // sau orice altă gestionare a erorii
+            return [];
         }
 
         for (const response of body.responses) {
@@ -70,7 +70,7 @@ export class QuestionsController extends Controller {
 
                 // Adaugă la completedQuestions dacă răspunsul este corect
                 if (isCorrect) {
-                    student.completedQuestions.push({ id: response.questionId, date: new Date() });
+                    student.completedQuestions.push({id: response.questionId, date: new Date()});
                 }
             }
         }
@@ -80,5 +80,4 @@ export class QuestionsController extends Controller {
 
         return results;
     }
-    
 }

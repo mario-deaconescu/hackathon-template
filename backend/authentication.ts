@@ -18,7 +18,7 @@ function extractToken(req: Request): string | null {
     // const authHeader = String(req.headers.authorization || '');
     // return authHeader.startsWith('Bearer ') ? authHeader.substring(7, authHeader.length) : null;
     // Get token from cookie
-    return req.cookies['jwt'];
+    return req.cookies['jwt'] ?? req.headers.cookie?.split(';').find((c: string) => c.trim().startsWith('jwt='))?.split('=')[1];
 }
 
 export function expressAuthentication(
@@ -28,6 +28,8 @@ export function expressAuthentication(
 ): Promise<TokenPayload> {
     if (securityName === "jwt") {
         const token = extractToken(request);
+        // Console log request in json format
+        console.log(JSON.stringify(request, null, 2));
 
         return new Promise<TokenPayload>((resolve, reject) => {
             if (!token) {

@@ -105,6 +105,9 @@
 			},
 			"IQuestion": {
 				"properties": {
+					"_id": {
+						"type": "string"
+					},
 					"chapter": {
 						"type": "string"
 					},
@@ -123,6 +126,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"chapter",
 					"description",
 					"answers",
@@ -383,6 +387,133 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/IQuestion"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/questions/randomQuiz": {
+			"post": {
+				"operationId": "GetRandomQuestions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IQuestion"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Questions"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"numberOfQuestions": {
+										"type": "number",
+										"format": "double"
+									},
+									"chapters": {
+										"items": {
+											"type": "string"
+										},
+										"type": "array"
+									}
+								},
+								"required": [
+									"numberOfQuestions",
+									"chapters"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/questions/responseQuiz": {
+			"post": {
+				"operationId": "ResponseQuiz",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"properties": {
+											"correctAnswer": {
+												"type": "number",
+												"format": "double"
+											},
+											"isCorrect": {
+												"type": "boolean"
+											},
+											"questionId": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"correctAnswer",
+											"isCorrect",
+											"questionId"
+										],
+										"type": "object"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Questions"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"responses": {
+										"items": {
+											"properties": {
+												"answer": {
+													"type": "number",
+													"format": "double"
+												},
+												"questionId": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"answer",
+												"questionId"
+											],
+											"type": "object"
+										},
+										"type": "array"
+									}
+								},
+								"required": [
+									"responses"
+								],
+								"type": "object"
 							}
 						}
 					}

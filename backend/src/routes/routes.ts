@@ -61,6 +61,7 @@ const models: TsoaRoute.Models = {
     "IQuestion": {
         "dataType": "refObject",
         "properties": {
+            "_id": {"dataType":"string","required":true},
             "chapter": {"dataType":"string","required":true},
             "description": {"dataType":"string","required":true},
             "answers": {"dataType":"array","array":{"dataType":"string"},"required":true},
@@ -257,6 +258,56 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.createQuestion.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/questions/randomQuiz',
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.getRandomQuestions)),
+
+            function QuestionsController_getRandomQuestions(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"numberOfQuestions":{"dataType":"double","required":true},"chapters":{"dataType":"array","array":{"dataType":"string"},"required":true}}},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new QuestionsController();
+
+
+              const promise = controller.getRandomQuestions.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/questions/responseQuiz',
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.responseQuiz)),
+
+            function QuestionsController_responseQuiz(request: any, response: any, next: any) {
+            const args = {
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"responses":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"answer":{"dataType":"double","required":true},"questionId":{"dataType":"string","required":true}}},"required":true}}},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new QuestionsController();
+
+
+              const promise = controller.responseQuiz.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

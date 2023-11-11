@@ -4,6 +4,7 @@ import RoleRoute from "./RoleRoute.tsx";
 import LoginPage from "../auth/LoginPage.tsx";
 import SignupPage from "../auth/SignupPage.tsx";
 import TestComponent from "../test/TestComponent.tsx";
+import Welcome from "../pages/Welcome.tsx";
 
 type ExtendedRouteObject = Omit<RouteObject, 'children'> & {
     roles?: string[];
@@ -37,7 +38,13 @@ const rawRoutes: ExtendedRouteObject[] = [
                 id: 'Home',
                 element: <div>Home</div>,
                 auth: true
+            },
+            {
+                id: 'Welcome',
+                path: 'welcome',
+                element: <Welcome/>
             }
+
         ],
     }
 ];

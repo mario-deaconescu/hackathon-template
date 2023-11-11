@@ -4,6 +4,7 @@ import {RootState, useAppDispatch} from "../redux/store.tsx";
 import {login, signOut} from "../redux/userSlice.ts";
 import {useSelector} from "react-redux";
 import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 
 interface FormValues {
     email: string
@@ -13,6 +14,7 @@ interface FormValues {
 const Login = () => {
     const loadingUser = useSelector((state: RootState) => state.user.isLoading);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -22,10 +24,13 @@ const Login = () => {
     });
     const submitForm = async (values: FormValues) => {
         await dispatch(signOut());
-        await dispatch(login({
+        const response = await dispatch(login({
             email: values.email,
             password: values.password
         }));
+        if (response.meta.requestStatus === 'fulfilled') {
+            navigate('/');
+        }
     }
 
     useEffect(() => {

@@ -46,12 +46,12 @@ const rawRoutes: ExtendedRouteObject[] = [
                 element: <MainPage/>,
                 children: [
                     {
-                        id: 'quizes',
-                        path: 'Quizes',
+                        id: 'Quizes',
+                        path: 'quizes',
                         element: <QuizesPage/>
                     },
                     {
-                        id: 'profile_student',
+                        id: 'Profile',
                         path: 'profile/student',
                         element: <ProfileStudent/>
                     }

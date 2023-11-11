@@ -1,6 +1,7 @@
-import {IQuestion} from "../api";
-import {useEffect, useState} from "react";
+import {IQuestion, QuestionsService} from "../api";
+import {useEffect, useMemo, useState} from "react";
 import {Button, Card, CardBody, CardFooter, CardHeader, Radio, RadioGroup} from "@nextui-org/react";
+import {AiOutlineCheck, AiOutlineClose} from "react-icons/ai";
 
 type Props = {
     chapters: string[];
@@ -9,28 +10,44 @@ type Props = {
 
 const Quiz = ({chapters, questionNumber}: Props) => {
     const [questions, setQuestions] = useState<IQuestion[]>([]);
-    const [answerDict, setAnswerDict] = useState<Record<number, number>>({});
+    const [answerDict, setAnswerDict] = useState<Record<string, number>>({});
+    const [correctAnswers, setCorrectAnswers] = useState<Record<string, number> | null>(null);
 
     useEffect(() => {
-        setQuestions([{
-            chapter: "India",
-            description: "What is the capital of India?",
-            answers: ["Delhi", "Mumbai", "Kolkata", "Chennai"],
-            correctAnswer: 0
-        },
-            {
-                chapter: "India",
-                description: "What is the capital of India?",
-                answers: ["Delhi", "Mumbai", "Kolkata", "Chennai"],
-                correctAnswer: 0
-            }]);
-    }, []);
+        QuestionsService.getRandomQuestions({chapters, numberOfQuestions: questionNumber}).then((response) => {
+            setQuestions(response);
+        });
+    }, [chapters, questionNumber]);
     const selectAnswer = (questionNumber: number, answerNumber: number) => {
         setAnswerDict({...answerDict, [questionNumber]: answerNumber});
     }
-    const submitQuiz = () => {
-        console.log(answerDict);
+    const submitQuiz = async () => {
+        const body = Object.entries(answerDict).map(([questionId, answerNumber]) => ({
+            questionId: questionId,
+            answer: answerNumber
+        }));
+        QuestionsService.responseQuiz({
+            responses: body
+        }).then((response) => {
+            const newCorrectAnswers: Record<string, number> = {};
+            response.forEach((entry) => {
+                newCorrectAnswers[entry.questionId] = entry.correctAnswer;
+            });
+            setCorrectAnswers(newCorrectAnswers);
+        });
     };
+    const getQuestionIcon = useMemo(() =>
+            (questionId: string) => {
+                if (correctAnswers) {
+                    if (answerDict[questionId] === correctAnswers[questionId]) {
+                        return <span color="green"><AiOutlineCheck/></span>;
+                    } else {
+                        return <span color="red"><AiOutlineClose/></span>;
+                    }
+                }
+                return null;
+            }
+        , [correctAnswers]);
     return (
         <div className="flex flex-col gap-3">
             {
@@ -49,7 +66,8 @@ const Quiz = ({chapters, questionNumber}: Props) => {
                                         onValueChange={(answer) => selectAnswer(index, parseInt(answer))}>
                                 {question.answers.map((answer, index) => (
                                     <Radio key={index} value={index.toString()}>
-                                        {answer}
+                                        <span>{answer}</span>
+                                        {getQuestionIcon(question._id)}
                                     </Radio>
                                 ))}
                             </RadioGroup>

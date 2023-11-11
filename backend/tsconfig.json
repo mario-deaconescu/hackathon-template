@@ -24,6 +24,7 @@
     "esModuleInterop": true,
     /* Experimental Options */
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     // emitDecoratorMetadata is not needed by tsoa (unless you are using Custom Middlewares)
 
     /* Advanced Options */

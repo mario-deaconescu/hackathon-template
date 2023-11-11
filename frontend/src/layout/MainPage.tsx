@@ -1,5 +1,5 @@
 import {Navbar, NavbarBrand, NavbarContent, User} from "@nextui-org/react";
-import {NavLink, Outlet} from "react-router-dom";
+import {Link, NavLink, Outlet} from "react-router-dom";
 import routes from "../routes/routes.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store.tsx";
@@ -7,10 +7,11 @@ import {RootState} from "../redux/store.tsx";
 const MainPage = () => {
     const navbarItems = routes
         .find((route) => route.id === 'app')?.children
-        ?.find((route) => route.id === 'main')?.children;
+        ?.find((route) => route.id === 'main')?.children
+        ?.filter((route) => route.id !== 'Profile');
     const currentUser = useSelector((state: RootState) => state.user.user);
     return (
-        <>
+        <div className="w-full h-full flex flex-col">
             <Navbar>
                 <NavbarBrand>4tzapoliunibuc</NavbarBrand>
                 <NavbarContent className="hidden sm:flex gap-4" justify="center">
@@ -23,12 +24,16 @@ const MainPage = () => {
                     }
                 </NavbarContent>
                 <NavbarContent justify="end">
-                    <User name={currentUser?.name} description={currentUser?.email}
-                          avatarProps={{src: ''}}/>
+                    <Link to={'/profile/student'}>
+                        <User name={currentUser?.name} description={currentUser?.email}
+                              avatarProps={{src: ''}}/>
+                    </Link>
                 </NavbarContent>
             </Navbar>
-            <Outlet/>
-        </>
+            <div className="flex-grow overflow-y-auto">
+                <Outlet/>
+            </div>
+        </div>
     );
 };
 

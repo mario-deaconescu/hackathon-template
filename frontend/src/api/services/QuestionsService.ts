@@ -20,7 +20,7 @@ export class QuestionsService {
     ): CancelablePromise<IQuestion> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/questions/{questionId}',
+            url: '/questions/get/{questionId}',
             path: {
                 'questionId': questionId,
             },
@@ -38,6 +38,50 @@ export class QuestionsService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/questions/create',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * @param requestBody
+     * @returns IQuestion Ok
+     * @throws ApiError
+     */
+    public static getRandomQuestions(
+        requestBody: {
+            numberOfQuestions: number;
+            chapters: Array<string>;
+        },
+    ): CancelablePromise<Array<IQuestion>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/questions/randomQuiz',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * @param requestBody
+     * @returns any Ok
+     * @throws ApiError
+     */
+    public static responseQuiz(
+        requestBody: {
+            responses: Array<{
+                answer: number;
+                questionId: string;
+            }>;
+        },
+    ): CancelablePromise<Array<{
+        correctAnswer: number;
+        isCorrect: boolean;
+        questionId: string;
+    }>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/questions/responseQuiz',
             body: requestBody,
             mediaType: 'application/json',
         });

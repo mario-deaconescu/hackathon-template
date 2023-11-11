@@ -8,6 +8,9 @@ export type IStudent = {
     email: string;
     password: string;
     roles: Array<string>;
-    completedQuestions: Array<string>;
+    completedQuestions: Array<{
+        date: string;
+        id: string;
+    }>;
 };
 

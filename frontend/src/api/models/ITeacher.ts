@@ -3,11 +3,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type IUser = {
+export type ITeacher = {
     name: string;
     email: string;
     password: string;
     roles: Array<string>;
     type: string;
+    courses: Array<string>;
 };
 

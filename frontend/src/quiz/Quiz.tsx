@@ -2,6 +2,8 @@ import {IQuestion, QuestionsService} from "../api";
 import {useEffect, useMemo, useState} from "react";
 import {Button, Card, CardBody, CardFooter, CardHeader, Radio, RadioGroup} from "@nextui-org/react";
 import {AiOutlineCheck, AiOutlineClose} from "react-icons/ai";
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/store.tsx";
 
 type Props = {
     chapters: string[];
@@ -12,14 +14,14 @@ const Quiz = ({chapters, questionNumber}: Props) => {
     const [questions, setQuestions] = useState<IQuestion[]>([]);
     const [answerDict, setAnswerDict] = useState<Record<string, number>>({});
     const [correctAnswers, setCorrectAnswers] = useState<Record<string, number> | null>(null);
-
+    const currentUser = useSelector((state: RootState) => state.user.user);
     useEffect(() => {
         QuestionsService.getRandomQuestions({chapters, numberOfQuestions: questionNumber}).then((response) => {
             setQuestions(response);
         });
     }, [chapters, questionNumber]);
-    const selectAnswer = (questionNumber: number, answerNumber: number) => {
-        setAnswerDict({...answerDict, [questionNumber]: answerNumber});
+    const selectAnswer = (questionId: string, answerNumber: number) => {
+        setAnswerDict({...answerDict, [questionId]: answerNumber});
     }
     const submitQuiz = async () => {
         const body = Object.entries(answerDict).map(([questionId, answerNumber]) => ({
@@ -27,7 +29,8 @@ const Quiz = ({chapters, questionNumber}: Props) => {
             answer: answerNumber
         }));
         QuestionsService.responseQuiz({
-            responses: body
+            responses: body,
+            email: currentUser?.email || ''
         }).then((response) => {
             const newCorrectAnswers: Record<string, number> = {};
             response.forEach((entry) => {
@@ -37,12 +40,16 @@ const Quiz = ({chapters, questionNumber}: Props) => {
         });
     };
     const getQuestionIcon = useMemo(() =>
-            (questionId: string) => {
+            (questionId: string, index: number) => {
                 if (correctAnswers) {
-                    if (answerDict[questionId] === correctAnswers[questionId]) {
-                        return <span color="green"><AiOutlineCheck/></span>;
-                    } else {
-                        return <span color="red"><AiOutlineClose/></span>;
+                    if (answerDict[questionId] === index) {
+                        if (correctAnswers[questionId] === index) {
+                            return <AiOutlineCheck className="text-green-500 inline align-middle ml-1"/>;
+                        } else {
+                            return <AiOutlineClose className="text-red-500 inline align-middle ml-1"/>;
+                        }
+                    } else if (index === correctAnswers[questionId]) {
+                        return <AiOutlineCheck className="text-green-500 inline align-middle ml-1"/>;
                     }
                 }
                 return null;
@@ -51,11 +58,11 @@ const Quiz = ({chapters, questionNumber}: Props) => {
     return (
         <div className="flex flex-col gap-3">
             {
-                questions.map((question, index) => (
-                    <Card key={index} className="p-5">
+                questions.map((question, questionIndex) => (
+                    <Card key={questionIndex} className="p-5">
                         <CardHeader>
                             <h1 className="text-4xl font-medium justify-center">
-                                Question {index + 1}
+                                Question {questionIndex + 1}
                             </h1>
                         </CardHeader>
                         <CardBody>
@@ -63,11 +70,11 @@ const Quiz = ({chapters, questionNumber}: Props) => {
                                 {question.description}
                             </p>
                             <RadioGroup label="Select the answer"
-                                        onValueChange={(answer) => selectAnswer(index, parseInt(answer))}>
+                                        onValueChange={(answer) => selectAnswer(question._id, parseInt(answer))}>
                                 {question.answers.map((answer, index) => (
                                     <Radio key={index} value={index.toString()}>
                                         <span>{answer}</span>
-                                        {getQuestionIcon(question._id)}
+                                        {getQuestionIcon(question._id, index)}
                                     </Radio>
                                 ))}
                             </RadioGroup>

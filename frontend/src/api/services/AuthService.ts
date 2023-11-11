@@ -57,6 +57,22 @@ export class AuthService {
     }
 
     /**
+     * @param requestBody
+     * @returns any Ok
+     * @throws ApiError
+     */
+    public static signupTeacher(
+        requestBody: UserCreateModel,
+    ): CancelablePromise<IUser> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/auth/signupTeacher',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
      * @returns void
      * @throws ApiError
      */

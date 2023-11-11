@@ -2,7 +2,7 @@ import {Button, Card, CardBody, CardHeader, Input} from "@nextui-org/react";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../redux/store.tsx";
 import {useForm} from "react-hook-form";
-import {signUp} from "../redux/userSlice.ts";
+import {signUpStudent} from "../redux/userSlice.ts";
 import {AuthService} from "../api";
 
 interface FormValues {
@@ -22,7 +22,7 @@ const SignupUser = () => {
         mode: "onTouched"
     });
     const submitForm = (values: FormValues) => {
-        dispatch(signUp({
+        dispatch(signUpStudent({
             email: values.email,
             password: values.password,
             name: values.name

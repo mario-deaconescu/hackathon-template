@@ -1,7 +1,7 @@
 import {Button, Card, CardBody, CardHeader, Input} from "@nextui-org/react";
 import {useForm} from "react-hook-form";
 import {RootState, useAppDispatch} from "../redux/store.tsx";
-import {login} from "../redux/userSlice.ts";
+import {login, signOut} from "../redux/userSlice.ts";
 import {useSelector} from "react-redux";
 import {useEffect} from "react";
 
@@ -20,8 +20,9 @@ const Login = () => {
     } = useForm<FormValues>({
         mode: "onTouched"
     });
-    const submitForm = (values: FormValues) => {
-        dispatch(login({
+    const submitForm = async (values: FormValues) => {
+        await dispatch(signOut());
+        await dispatch(login({
             email: values.email,
             password: values.password
         }));

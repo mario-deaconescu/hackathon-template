@@ -25,6 +25,11 @@ export interface IStudent extends IUser {
         id: string,
         date: Date,
     }[];
+    subscribedCourses: string[];
+}
+
+export interface ITeacher extends IUser {
+    courses: string[];
 }
 
 export interface IUserMethods {
@@ -33,6 +38,7 @@ export interface IUserMethods {
 
 type UserModel = Model<IUser, {}, IUserMethods>;
 type StudentModel = Model<IStudent, {}, IUserMethods>;
+type TeacherModel = Model<ITeacher, {}, IUserMethods>;
 
 
 const usersSchema = new Schema<IUser, UserModel, IUserMethods>({
@@ -71,8 +77,14 @@ const studentsSchema = new Schema<IStudent, StudentModel, IUserMethods>({
             date: Date,
         }],
         default: [],
+    },
+    subscribedCourses: {
+        type: [String],
+        default: [],
     }
 });
+
+const teachersSchema = new Schema<ITeacher, TeacherModel, IUserMethods>({});
 
 usersSchema.pre(
     'save',
@@ -92,6 +104,7 @@ usersSchema.method('isValidPassword', async function (password: string) {
 const User = model<IUser, UserModel>('User', usersSchema);
 
 const Student = User.discriminator<IStudent, StudentModel>('Student', studentsSchema);
+const Teacher = User.discriminator<ITeacher, TeacherModel>('Teacher', teachersSchema);
 
 export default User;
-export {Student};
+export {Student, Teacher};

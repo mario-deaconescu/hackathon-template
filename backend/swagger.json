@@ -68,6 +68,34 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"IQuestion": {
+				"properties": {
+					"chapter": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"answers": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"correctAnswer": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"chapter",
+					"description",
+					"answers",
+					"correctAnswer"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -233,6 +261,79 @@
 						}
 					}
 				]
+			}
+		},
+		"/questions/{questionId}": {
+			"get": {
+				"operationId": "GetQuestion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IQuestion"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Questions"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "questionId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/questions/create": {
+			"post": {
+				"operationId": "CreateQuestion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IQuestion"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Questions"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IQuestion"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

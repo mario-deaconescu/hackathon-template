@@ -4,6 +4,8 @@
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse, fetchMiddlewares } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AuthController } from './../controllers/authController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { QuestionsController } from './../controllers/questionsController';
 import { expressAuthentication } from './../../authentication';
 // @ts-ignore - no great way to install types from subpackage
 const promiseAny = require('promise.any');
@@ -38,6 +40,17 @@ const models: TsoaRoute.Models = {
             "name": {"dataType":"string","required":true},
             "email": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IQuestion": {
+        "dataType": "refObject",
+        "properties": {
+            "chapter": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "answers": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "correctAnswer": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -171,6 +184,56 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.userExists.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/questions/:questionId',
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.getQuestion)),
+
+            function QuestionsController_getQuestion(request: any, response: any, next: any) {
+            const args = {
+                    questionId: {"in":"path","name":"questionId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new QuestionsController();
+
+
+              const promise = controller.getQuestion.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/questions/create',
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
+            ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.createQuestion)),
+
+            function QuestionsController_createQuestion(request: any, response: any, next: any) {
+            const args = {
+                    question: {"in":"body","name":"question","required":true,"ref":"IQuestion"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new QuestionsController();
+
+
+              const promise = controller.createQuestion.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

@@ -91,6 +91,12 @@
 							"type": "object"
 						},
 						"type": "array"
+					},
+					"subscribedCourses": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
@@ -99,7 +105,12 @@
 					"password",
 					"roles",
 					"type",
+<<<<<<< HEAD
 					"completedQuestions"
+=======
+					"completedQuestions",
+					"subscribedCourses"
+>>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -120,6 +131,128 @@
 					"name",
 					"email",
 					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITeacher": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"type": {
+						"type": "string"
+					},
+					"courses": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"email",
+					"password",
+					"roles",
+					"type",
+					"courses"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ICourseQuestion": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"answers": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"correctAnswer": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"description",
+					"answers",
+					"correctAnswer"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ICourse": {
+				"properties": {
+					"teacher": {
+						"$ref": "#/components/schemas/ITeacher"
+					},
+					"name": {
+						"type": "string"
+					},
+					"chapters": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"content": {
+						"type": "string"
+					},
+					"questions": {
+						"items": {
+							"$ref": "#/components/schemas/ICourseQuestion"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"teacher",
+					"name",
+					"chapters",
+					"content",
+					"questions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CourseCreateModel": {
+				"properties": {
+					"content": {
+						"type": "string"
+					},
+					"chapters": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"questions": {
+						"items": {
+							"$ref": "#/components/schemas/ICourseQuestion"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"content",
+					"chapters",
+					"questions"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -295,6 +428,43 @@
 				}
 			}
 		},
+		"/auth/signupTeacher": {
+			"post": {
+				"operationId": "SignupTeacher",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IUser"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserCreateModel"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/auth/logout": {
 			"delete": {
 				"operationId": "Logout",
@@ -341,24 +511,75 @@
 				]
 			}
 		},
+<<<<<<< HEAD
 		"/questions/totalQuestions": {
 			"get": {
 				"operationId": "GetTotalQuestions",
+=======
+		"/courses/subscribedCourses": {
+			"get": {
+				"operationId": "GetSubscribedCourses",
+>>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
+<<<<<<< HEAD
 									"type": "number",
 									"format": "double"
+=======
+									"items": {
+										"$ref": "#/components/schemas/ICourse"
+									},
+									"type": "array"
+>>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 								}
 							}
 						}
 					}
 				},
 				"tags": [
+<<<<<<< HEAD
 					"Questions"
+=======
+					"Course"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "email",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/courses/find": {
+			"get": {
+				"operationId": "Find",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ICourse"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Course"
+>>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 				],
 				"security": [],
 				"parameters": [
@@ -372,7 +593,39 @@
 								"type": "string"
 							}
 						}
+<<<<<<< HEAD
 					},
+=======
+					}
+				]
+			}
+		},
+		"/courses/create": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ICourse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Course"
+				],
+				"security": [],
+				"parameters": [
+>>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 					{
 						"in": "query",
 						"name": "email",
@@ -381,7 +634,21 @@
 							"type": "string"
 						}
 					}
+<<<<<<< HEAD
 				]
+=======
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CourseCreateModel"
+							}
+						}
+					}
+				}
+>>>>>>> 2d5267264bf7c7fe88772f3d817604e893d0d9be
 			}
 		},
 		"/questions/{questionId}": {

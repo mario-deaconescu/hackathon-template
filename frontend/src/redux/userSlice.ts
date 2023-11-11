@@ -14,12 +14,20 @@ const login = createAsyncThunk(
     }
 );
 
-const signUp = createAsyncThunk(
-    'user/signUp',
+const signUpStudent = createAsyncThunk(
+    'user/signUpStudent',
     async (info: UserCreateModel): Promise<IUser | null> => {
         return AuthService.signupStudent(info);
     }
 );
+
+const signUpTeacher = createAsyncThunk(
+    'user/signUpTeacher',
+    async (info: UserCreateModel): Promise<IUser | null> => {
+        return AuthService.signupTeacher(info);
+    }
+);
+
 
 const updateCurrentUser = createAsyncThunk(
     'user/updateCurrentUser',
@@ -83,13 +91,24 @@ const userSlice = createSlice({
             setUserAction(state, null);
             ErrorHandler("Invalid login");
         });
-        builder.addCase(signUp.fulfilled, (state, action) => {
+        builder.addCase(signUpStudent.fulfilled, (state, action) => {
             setUserAction(state, action.payload);
         });
-        builder.addCase(signUp.pending, (state) => {
+        builder.addCase(signUpStudent.pending, (state) => {
             state.isLoading = true;
         });
-        builder.addCase(signUp.rejected, (state) => {
+        builder.addCase(signUpStudent.rejected, (state) => {
+            state.isLoading = false;
+            setUserAction(state, null);
+            ErrorHandler("Invalid sign up");
+        });
+        builder.addCase(signUpTeacher.fulfilled, (state, action) => {
+            setUserAction(state, action.payload);
+        });
+        builder.addCase(signUpTeacher.pending, (state) => {
+            state.isLoading = true;
+        });
+        builder.addCase(signUpTeacher.rejected, (state) => {
             state.isLoading = false;
             setUserAction(state, null);
             ErrorHandler("Invalid sign up");
@@ -97,6 +116,6 @@ const userSlice = createSlice({
     }
 });
 
-export {updateCurrentUser, signOut, login, signUp};
+export {updateCurrentUser, signOut, login, signUpStudent, signUpTeacher};
 export const {setUser} = userSlice.actions;
 export default userSlice.reducer;

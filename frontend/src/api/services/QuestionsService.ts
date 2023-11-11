@@ -20,7 +20,7 @@ export class QuestionsService {
     ): CancelablePromise<IQuestion> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/questions/get/{questionId}',
+            url: '/questions/{questionId}',
             path: {
                 'questionId': questionId,
             },
@@ -73,6 +73,7 @@ export class QuestionsService {
                 answer: number;
                 questionId: string;
             }>;
+            email: string;
         },
     ): CancelablePromise<Array<{
         correctAnswer: number;

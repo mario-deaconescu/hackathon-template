@@ -3,13 +3,21 @@ import {Link, NavLink, Outlet} from "react-router-dom";
 import routes from "../routes/routes.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store.tsx";
+import {useMemo} from "react";
 
 const MainPage = () => {
-    const navbarItems = routes
-        .find((route) => route.id === 'app')?.children
-        ?.find((route) => route.id === 'main')?.children
-        ?.filter((route) => route.id !== 'Profile');
     const currentUser = useSelector((state: RootState) => state.user.user);
+    const navbarItems = useMemo(() => {
+        const all = routes
+            .find((route) => route.id === 'app')?.children
+            ?.find((route) => route.id === 'main')?.children
+            ?.filter((route) => route.id !== 'Profile');
+        if (currentUser?.type === 'Student') {
+            return all;
+        } else if (currentUser?.type === 'Teacher') {
+            return all?.filter((route) => route.id !== 'Quizes');
+        }
+    }, [currentUser]);
     return (
         <div className="w-full h-full flex flex-col">
             <Navbar>

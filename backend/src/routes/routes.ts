@@ -10,6 +10,8 @@ import { CourseController } from './../controllers/coursesController';
 import { QuestionsController } from './../controllers/questionsController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { SkillsController } from './../controllers/skillsController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { StatisticsController } from './../controllers/statisticsController';
 import { expressAuthentication } from './../../authentication';
 // @ts-ignore - no great way to install types from subpackage
 const promiseAny = require('promise.any');
@@ -599,6 +601,31 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.getChapters.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/statistics/getUserStatistics',
+            ...(fetchMiddlewares<RequestHandler>(StatisticsController)),
+            ...(fetchMiddlewares<RequestHandler>(StatisticsController.prototype.getUserStatistics)),
+
+            function StatisticsController_getUserStatistics(request: any, response: any, next: any) {
+            const args = {
+                    email: {"in":"query","name":"email","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new StatisticsController();
+
+
+              const promise = controller.getUserStatistics.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

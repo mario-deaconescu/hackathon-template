@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, Route, Tags} from "tsoa";
+import {Body, Controller, Post, Route, Tags} from "tsoa";
 import Skills, {ISkill} from "../models/skills";
 
 @Route("skills")
@@ -15,20 +15,5 @@ export class SkillsController extends Controller {
         }
         this.setStatus(202);
         return savedSkill;
-    }
-
-    @Get("all")
-    public async getAllSkills(): Promise<ISkill[]> {
-        return Skills.find({});
-    }
-
-    @Get("{skillName}")
-    public async getChapters(skillName: string): Promise<string[] | void> {
-        const skill = await Skills.findOne({name: skillName});
-        if (!skill) {
-            this.setStatus(404);
-            return;
-        }
-        return skill.chapters;
     }
 }

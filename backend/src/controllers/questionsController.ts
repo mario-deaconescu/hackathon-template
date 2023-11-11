@@ -1,5 +1,7 @@
-import {Body, Controller, Get, Post, Route, Tags} from "tsoa";
-import Questions, {IQuestion} from "../models/question";
+import { Body, Controller, Get, Post, Request, Route, Security, Tags } from "tsoa";
+import Questions, { IQuestion } from "../models/question";
+import Users, { Student, IStudent } from "../models/users";
+import { JwtRequest } from "../../authentication";
 
 @Route("questions")
 @Tags("Questions")
@@ -42,20 +44,39 @@ export class QuestionsController extends Controller {
     }
 
     @Post("responseQuiz")
-    public async responseQuiz(@Body() body: { responses: Array<{ questionId: string, answer: number }> }): Promise<Array<{ questionId: string, isCorrect: boolean, correctAnswer: number }>> {
+    @Security("jwt") // Asigură-te că acest decorator este utilizat corect
+    public async responseQuiz(@Request() request: JwtRequest, @Body() body: { responses: Array<{ questionId: string, answer: number }> }): Promise<Array<{ questionId: string, isCorrect: boolean, correctAnswer: number }>> {
         let results = [];
+
+        // Obține studentul curent
+        console.log(request.user.email);
+        const student = await Student.findOne({ email: request.user.email });
+        console.log(student?.email);
+        if (!student) {
+            this.setStatus(401); // sau orice altă gestionare a erorii
+            return []; 
+        }
 
         for (const response of body.responses) {
             const question = await Questions.findById(response.questionId);
 
             if (question) {
+                const isCorrect = question.correctAnswer === response.answer;
                 results.push({
                     questionId: response.questionId,
-                    isCorrect: question.correctAnswer === response.answer,
+                    isCorrect: isCorrect,
                     correctAnswer: question.correctAnswer
                 });
+
+                // Adaugă la completedQuestions dacă răspunsul este corect
+                if (isCorrect) {
+                    student.completedQuestions.push({ id: response.questionId, date: new Date() });
+                }
             }
         }
+
+        // Salvează modificările făcute asupra studentului
+        await student.save();
 
         return results;
     }

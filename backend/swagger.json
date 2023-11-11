@@ -68,7 +68,20 @@
 					},
 					"completedQuestions": {
 						"items": {
-							"type": "string"
+							"properties": {
+								"date": {
+									"type": "string",
+									"format": "date-time"
+								},
+								"id": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"date",
+								"id"
+							],
+							"type": "object"
 						},
 						"type": "array"
 					}
@@ -482,7 +495,11 @@
 				"tags": [
 					"Questions"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,

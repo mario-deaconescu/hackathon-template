@@ -48,6 +48,7 @@ const TestComponent = () => {
                 <button onClick={handleSubmit(submitForm)}>Submit</button>
             </form>
             <button onClick={() => dispatch(signOut())}>Sign Out</button>
+            <h1>Hello World</h1>
         </div>
     );
 };

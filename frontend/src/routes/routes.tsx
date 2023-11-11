@@ -2,6 +2,8 @@ import {RouteObject} from "react-router-dom";
 import App from "../App.tsx";
 import RoleRoute from "./RoleRoute.tsx";
 import LoginPage from "../auth/LoginPage.tsx";
+import SignupPage from "../auth/SignupPage.tsx";
+import TestComponent from "../test/TestComponent.tsx";
 
 type ExtendedRouteObject = Omit<RouteObject, 'children'> & {
     roles?: string[];
@@ -16,9 +18,19 @@ const rawRoutes: ExtendedRouteObject[] = [
         id: 'app',
         children: [
             {
+                path: 'debug',
+                id: 'debug',
+                element: <TestComponent/>
+            },
+            {
                 path: 'login',
                 id: 'login',
                 element: <LoginPage/>
+            },
+            {
+                path: 'signup',
+                id: 'signup',
+                element: <SignupPage/>
             },
             {
                 index: true,

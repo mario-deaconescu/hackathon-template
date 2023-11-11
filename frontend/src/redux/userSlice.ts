@@ -17,7 +17,7 @@ const login = createAsyncThunk(
 const signUp = createAsyncThunk(
     'user/signUp',
     async (info: UserCreateModel): Promise<IUser | null> => {
-        return AuthService.signup(info);
+        return AuthService.signupStudent(info);
     }
 );
 

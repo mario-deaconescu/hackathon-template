@@ -5,7 +5,6 @@ import LoginPage from "../auth/LoginPage.tsx";
 import TestComponent from "../test/TestComponent.tsx";
 import SignupPage from "../pages/SignupPage.tsx";
 import Welcome from "../pages/Welcome.tsx";
-// import Welcome from "../pages/Welcome.tsx";
 
 type ExtendedRouteObject = Omit<RouteObject, 'children'> & {
     roles?: string[];
@@ -38,6 +37,11 @@ const rawRoutes: ExtendedRouteObject[] = [
                 path: 'signup/teacher',
                 id: 'signup_teacher',
                 element: <SignupPage type={'teacher'}/>
+            },
+            {
+                path: 'quizes',
+                id: 'quizes',
+                element: <QuizesPage/>
             },
             {
                 index: true,

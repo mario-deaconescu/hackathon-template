@@ -49,6 +49,40 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"IStudent": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"completedQuestions": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"email",
+					"password",
+					"roles",
+					"completedQuestions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UserCreateModel": {
 				"properties": {
 					"name": {
@@ -65,6 +99,53 @@
 					"name",
 					"email",
 					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IQuestion": {
+				"properties": {
+					"chapter": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"answers": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"correctAnswer": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"chapter",
+					"description",
+					"answers",
+					"correctAnswer"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ISkill": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"chapters": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"chapters"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -152,9 +233,9 @@
 				}
 			}
 		},
-		"/auth/signup": {
+		"/auth/signupStudent": {
 			"post": {
-				"operationId": "Signup",
+				"operationId": "SignupStudent",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -163,7 +244,7 @@
 								"schema": {
 									"anyOf": [
 										{
-											"$ref": "#/components/schemas/IUser"
+											"$ref": "#/components/schemas/IStudent"
 										},
 										{}
 									]
@@ -227,6 +308,180 @@
 					{
 						"in": "path",
 						"name": "email",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/questions/{questionId}": {
+			"get": {
+				"operationId": "GetQuestion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IQuestion"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Questions"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "questionId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/questions/create": {
+			"post": {
+				"operationId": "CreateQuestion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IQuestion"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Questions"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IQuestion"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/skills/create": {
+			"post": {
+				"operationId": "CreateSkill",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ISkill"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ISkill"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/skills/all": {
+			"get": {
+				"operationId": "GetAllSkills",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ISkill"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/skills/{skillName}": {
+			"get": {
+				"operationId": "GetChapters",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"type": "string"
+											},
+											"type": "array"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "skillName",
 						"required": true,
 						"schema": {
 							"type": "string"

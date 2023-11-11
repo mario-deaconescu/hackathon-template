@@ -19,11 +19,16 @@ export interface IUser {
     roles: string[];
 }
 
+export interface IStudent extends IUser {
+    completedQuestions: string[];
+}
+
 export interface IUserMethods {
     isValidPassword: (password: string) => Promise<boolean>;
 }
 
 type UserModel = Model<IUser, {}, IUserMethods>;
+type StudentModel = Model<IStudent, {}, IUserMethods>;
 
 
 const usersSchema = new Schema<IUser, UserModel, IUserMethods>({
@@ -50,8 +55,17 @@ const usersSchema = new Schema<IUser, UserModel, IUserMethods>({
         type: [String],
         default: ['member'],
     }
-}, {timestamps: true});
+}, {
+    timestamps: true,
+    discriminatorKey: 'type',
+});
 
+const studentsSchema = new Schema<IStudent, StudentModel, IUserMethods>({
+    completedQuestions: {
+        type: [String],
+        default: [],
+    }
+});
 
 usersSchema.pre(
     'save',
@@ -70,4 +84,7 @@ usersSchema.method('isValidPassword', async function (password: string) {
 
 const User = model<IUser, UserModel>('User', usersSchema);
 
+const Student = User.discriminator<IStudent, StudentModel>('Student', studentsSchema);
+
 export default User;
+export {Student};

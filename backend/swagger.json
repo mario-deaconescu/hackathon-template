@@ -234,6 +234,9 @@
 			},
 			"CourseCreateModel": {
 				"properties": {
+					"name": {
+						"type": "string"
+					},
 					"content": {
 						"type": "string"
 					},
@@ -251,9 +254,49 @@
 					}
 				},
 				"required": [
+					"name",
 					"content",
 					"chapters",
 					"questions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CourseWithSubscribers": {
+				"properties": {
+					"teacher": {
+						"$ref": "#/components/schemas/ITeacher"
+					},
+					"name": {
+						"type": "string"
+					},
+					"chapters": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"content": {
+						"type": "string"
+					},
+					"questions": {
+						"items": {
+							"$ref": "#/components/schemas/ICourseQuestion"
+						},
+						"type": "array"
+					},
+					"subscribers": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"teacher",
+					"name",
+					"chapters",
+					"content",
+					"questions",
+					"subscribers"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -627,6 +670,40 @@
 						}
 					}
 				}
+			}
+		},
+		"/courses/myCourses": {
+			"get": {
+				"operationId": "MyCourses",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CourseWithSubscribers"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Course"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "email",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/questions/totalQuestions": {

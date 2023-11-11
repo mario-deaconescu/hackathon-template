@@ -2,6 +2,7 @@ import {model, Model, Schema} from "mongoose";
 import {ITeacher} from "./users";
 
 export interface CourseCreateModel {
+    name: string;
     content: string;
     chapters: string[];
     questions: ICourseQuestion[];
@@ -19,6 +20,10 @@ export interface ICourse {
     chapters: string[];
     content: string;
     questions: ICourseQuestion[];
+}
+
+export interface CourseWithSubscribers extends ICourse {
+    subscribers: number;
 }
 
 type CourseModel = Model<ICourse>;

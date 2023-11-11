@@ -20,7 +20,10 @@ export interface IUser {
 }
 
 export interface IStudent extends IUser {
-    completedQuestions: string[];
+    completedQuestions: {
+        id: string,
+        date: Date,
+    }[];
 }
 
 export interface IUserMethods {
@@ -62,7 +65,10 @@ const usersSchema = new Schema<IUser, UserModel, IUserMethods>({
 
 const studentsSchema = new Schema<IStudent, StudentModel, IUserMethods>({
     completedQuestions: {
-        type: [String],
+        type: [{
+            id: String,
+            date: Date,
+        }],
         default: [],
     }
 });

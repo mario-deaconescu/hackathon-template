@@ -28,8 +28,6 @@ export function expressAuthentication(
 ): Promise<TokenPayload> {
     if (securityName === "jwt") {
         const token = extractToken(request);
-        // Console log request in json format
-        console.log(JSON.stringify(request, null, 2));
 
         return new Promise<TokenPayload>((resolve, reject) => {
             if (!token) {

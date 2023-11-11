@@ -495,11 +495,7 @@
 				"tags": [
 					"Questions"
 				],
-				"security": [
-					{
-						"jwt": []
-					}
-				],
+				"security": [],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -525,10 +521,14 @@
 											"type": "object"
 										},
 										"type": "array"
+									},
+									"email": {
+										"type": "string"
 									}
 								},
 								"required": [
-									"responses"
+									"responses",
+									"email"
 								],
 								"type": "object"
 							}

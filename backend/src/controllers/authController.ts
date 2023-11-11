@@ -9,6 +9,9 @@ export class AuthController extends Controller {
     @Security("jwt")
     public async currentUser(@Request() request: JwtRequest): Promise<IUser | void> {
         const user = await Users.findOne({email: request.user.email});
+        console.log(request.cookies);
+        console.log(request.user);
+        //console.log();
         if (!user) {
             this.setStatus(401);
             return;

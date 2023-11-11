@@ -290,14 +290,12 @@ export function RegisterRoutes(app: Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/questions/responseQuiz',
-            authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
             ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.responseQuiz)),
 
             function QuestionsController_responseQuiz(request: any, response: any, next: any) {
             const args = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"responses":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"answer":{"dataType":"double","required":true},"questionId":{"dataType":"string","required":true}}},"required":true}}},
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"responses":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"answer":{"dataType":"double","required":true},"questionId":{"dataType":"string","required":true}}},"required":true},"email":{"dataType":"string","required":true}}},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

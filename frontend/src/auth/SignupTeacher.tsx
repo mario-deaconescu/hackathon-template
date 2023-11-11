@@ -9,9 +9,10 @@ interface FormValues {
     email: string
     password: string
     name: string
+    files: FileList
 }
 
-const Signup = () => {
+const SignupUser = () => {
     const loadingUser = useSelector((state: RootState) => state.user.isLoading);
     const dispatch = useAppDispatch();
     const {
@@ -37,10 +38,10 @@ const Signup = () => {
         }
     }
     return (
-        <Card className="p-5 w-full lg:w-1/2 h-fit">
+        <Card className="p-5 w-full h-fit">
             <CardHeader>
                 <h1 className="text-4xl font-medium justify-center">
-                    Sign Up
+                    Sign Up as Teacher
                 </h1>
             </CardHeader>
             <CardBody>
@@ -69,6 +70,7 @@ const Signup = () => {
                     })} placeholder="Password"
                            isInvalid={errors.password !== undefined}
                            errorMessage={errors.password?.message}/>
+                    <Input {...register("files")} type="file" name="cv"/>
                     <Button color="primary" onClick={handleSubmit(submitForm)} isLoading={loadingUser}
                             isDisabled={!isValid}>
                         Submit
@@ -79,4 +81,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default SignupUser;

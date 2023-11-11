@@ -1,6 +1,7 @@
 import {model, Model, Schema} from "mongoose";
 
 export interface IQuestion {
+    _id: string,
     chapter: string,
     description: string,
     answers: string[],

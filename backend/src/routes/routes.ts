@@ -6,6 +6,8 @@ import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, H
 import { AuthController } from './../controllers/authController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { QuestionsController } from './../controllers/questionsController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { SkillsController } from './../controllers/skillsController';
 import { expressAuthentication } from './../../authentication';
 // @ts-ignore - no great way to install types from subpackage
 const promiseAny = require('promise.any');
@@ -51,6 +53,15 @@ const models: TsoaRoute.Models = {
             "description": {"dataType":"string","required":true},
             "answers": {"dataType":"array","array":{"dataType":"string"},"required":true},
             "correctAnswer": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ISkill": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "chapters": {"dataType":"array","array":{"dataType":"string"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -234,6 +245,31 @@ export function RegisterRoutes(app: Router) {
 
 
               const promise = controller.createQuestion.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/skills/create',
+            ...(fetchMiddlewares<RequestHandler>(SkillsController)),
+            ...(fetchMiddlewares<RequestHandler>(SkillsController.prototype.createSkill)),
+
+            function SkillsController_createSkill(request: any, response: any, next: any) {
+            const args = {
+                    skill: {"in":"body","name":"skill","required":true,"ref":"ISkill"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new SkillsController();
+
+
+              const promise = controller.createSkill.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

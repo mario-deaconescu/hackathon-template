@@ -96,6 +96,25 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ISkill": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"chapters": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"name",
+					"chapters"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -330,6 +349,43 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/IQuestion"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/skills/create": {
+			"post": {
+				"operationId": "CreateSkill",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ISkill"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ISkill"
 							}
 						}
 					}

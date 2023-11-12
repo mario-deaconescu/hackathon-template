@@ -112,6 +112,11 @@ export default function ProfileStudent({fromRoute}: Props) {
                         </div>
                         <hr/>
                     </div>
+                    <h2 className="text-center text-3xl text-slate-200">Activity</h2>
+                    <div className="p-5">
+                        <Calendar
+                            data={[0, 1, 0, 3, 5, 2, 0, 0, 0, 0, 20, 50, 20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1]}/>
+                    </div>
                     <div className='pb-20'>
                         {
                             statistics.skillStatistics.map(item => returnSkill(item))
@@ -119,7 +124,6 @@ export default function ProfileStudent({fromRoute}: Props) {
                     </div>
                 </>
             }
-            <Calendar data={[0, 1, 0, 3, 5, 2, 0, 0, 0, 0, 20, 50, 20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1]}/>
         </div>
     )
 

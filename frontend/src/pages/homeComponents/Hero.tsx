@@ -11,6 +11,7 @@ export default function Hero() {
             <div className="basis-1/2 text-white ps-8 z-20">
                 <h1 className='text-[2.5rem] font-thin'>We connect students, teachers and recruters</h1>
                 <h2 className="text-[2.7rem] font-bold font-mono">For a better <span className='bg-gradient-to-tr from-red-800 via-red-500 to-blue-300 bg-clip-text text-transparent'>future</span></h2>
+                <div className="flex justify-center">
                 <Button
                     href="/login"
                     as={Link}
@@ -21,7 +22,7 @@ export default function Hero() {
                     Login
                 </Button>
                 <Button
-                    href="/signup/student"
+                    href="/welcome"
                     as={Link}
                     color="primary"
                     variant="shadow"
@@ -29,6 +30,7 @@ export default function Hero() {
                     >
                     Stert Learning
                 </Button>
+                </div>
                 
             </div>
             <div className="basis-1/2 item-center h-full bg-red-500 relative">

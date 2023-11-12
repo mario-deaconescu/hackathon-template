@@ -12,22 +12,25 @@ import { request as __request } from '../core/request';
 export class QuestionsService {
 
     /**
-     * @param chapters
      * @param email
+     * @param requestBody
      * @returns number Ok
      * @throws ApiError
      */
     public static getTotalQuestions(
-        chapters: Array<string>,
         email: string,
+        requestBody: {
+            chapters: Array<string>;
+        },
     ): CancelablePromise<number> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/questions/totalQuestions',
             query: {
-                'chapters': chapters,
                 'email': email,
             },
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 
@@ -106,6 +109,17 @@ export class QuestionsService {
             url: '/questions/responseQuiz',
             body: requestBody,
             mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * @returns void
+     * @throws ApiError
+     */
+    public static startGeneration(): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/questions/startGeneration',
         });
     }
 

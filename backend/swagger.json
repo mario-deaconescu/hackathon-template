@@ -1158,7 +1158,7 @@
 			}
 		},
 		"/questions/totalQuestions": {
-			"get": {
+			"post": {
 				"operationId": "GetTotalQuestions",
 				"responses": {
 					"200": {
@@ -1180,24 +1180,34 @@
 				"parameters": [
 					{
 						"in": "query",
-						"name": "chapters",
-						"required": true,
-						"schema": {
-							"type": "array",
-							"items": {
-								"type": "string"
-							}
-						}
-					},
-					{
-						"in": "query",
 						"name": "email",
 						"required": true,
 						"schema": {
 							"type": "string"
 						}
 					}
-				]
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"chapters": {
+										"items": {
+											"type": "string"
+										},
+										"type": "array"
+									}
+								},
+								"required": [
+									"chapters"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/questions/{questionId}": {

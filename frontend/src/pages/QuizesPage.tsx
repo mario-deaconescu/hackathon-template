@@ -20,7 +20,9 @@ const QuizesPage = () => {
         console.log(selectedSkill);
     });
     useEffect(() => {
-        QuestionsService.getTotalQuestions(Array.from(selectedChapters) as string[], currentUser?.email ?? '').then((response) => {
+        QuestionsService.getTotalQuestions(currentUser?.email ?? '', {
+            chapters: Array.from(selectedChapters) as string[],
+        }).then((response) => {
             setAvailableQuestions(response);
         });
     }, [selectedChapters]);
@@ -29,7 +31,7 @@ const QuizesPage = () => {
     }
     const quiz = useMemo(() => (
         <Quiz chapters={Array.from(selectedChapters) as string[]} questionNumber={Math.min(5, availableQuestions)}/>
-    ), [selectedChapters]);
+    ), [selectedChapters, availableQuestions]);
     return (
         <div className="w-full h-full p-10 overflow-y-auto">
             <div className="w-full lg:w-fit flex flex-row justify-center items-center gap-2 flex-wrap">

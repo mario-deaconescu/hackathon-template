@@ -97,18 +97,18 @@ export default function ProfileStudent({fromRoute}: Props) {
     const generateCalendarData = () => {
         const dataLength = 30; // Lungimea dorită pentru array
         let calendarData = Array(dataLength).fill(0); // Inițializare cu 0
-    
+
         const today = new Date(); // Data curentă
-    
+
         currentUser?.completedQuestions.forEach(question => {
             const questionDate = new Date(question.date);
             const diffDays = Math.floor((today - questionDate) / (1000 * 60 * 60 * 24)); // Diferența în zile
-    
+
             if (diffDays >= 0 && diffDays < dataLength) {
                 calendarData[dataLength - 1 - diffDays]++; // Incrementăm valoarea corespunzătoare zilei
             }
         });
-    
+
         return calendarData;
     };
 
@@ -138,7 +138,8 @@ export default function ProfileStudent({fromRoute}: Props) {
                     </div>
                     <h2 className="text-center text-3xl text-slate-200">Activity</h2>
                     <div className="p-5">
-                        <Calendar data={generateCalendarData()}/>
+                        <Calendar
+                            data={[0, 1, 0, 3, 5, 2, 0, 0, 0, 0, 20, 50, 20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1]}/>
                     </div>
                     <div className='pb-20'>
                         {

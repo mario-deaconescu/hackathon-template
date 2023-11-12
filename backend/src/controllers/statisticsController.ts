@@ -30,6 +30,7 @@ export class StatisticsController extends Controller {
     @Get("getUserStatistics")
     public async getUserStatistics(@Query() id: string): Promise<StatisticsResponse | void> {
         const student = await Student.findOne({_id: id});
+        //console.log(student.email);
         if (!student) {
             this.setStatus(404);
             return;
@@ -41,6 +42,7 @@ export class StatisticsController extends Controller {
 
         const skills = await Skills.find();
         for (const skill of skills) {
+            //console.log(skill);
             let skillStat = {
                 name: skill.name,
                 chapters: [] as ChapterStatistics[],
@@ -54,6 +56,7 @@ export class StatisticsController extends Controller {
                     let correctAnswers = 0;
 
                     for (const completedQuestion of student.completedQuestions) {
+                        console.log(completedQuestion);
                         const question = await Questions.findById(completedQuestion.id);
                         if (question && question.chapter === chapter) {
                             correctAnswers++;

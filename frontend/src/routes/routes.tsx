@@ -69,6 +69,11 @@ const rawRoutes: ExtendedRouteObject[] = [
                     },
                     {
                         id: 'Profile',
+                        path: 'profile/:id',
+                        element: <ProfileStudent fromRoute={true}/>
+                    },
+                    {
+                        id: 'CurrentProfile',
                         path: 'profile/student',
                         element: <ProfileStudent/>
                     },

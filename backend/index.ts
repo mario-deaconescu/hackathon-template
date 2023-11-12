@@ -9,9 +9,12 @@ import dbConnect from "./db-connect";
 import cookieParser from 'cookie-parser';
 import {createServer} from "https";
 import * as fs from "fs";
+import OpenAI from "openai";
 
 //For env File
 dotenv.config();
+
+export const openApi = new OpenAI();
 
 const app: Application = express();
 const port = process.env.PORT || 8000;

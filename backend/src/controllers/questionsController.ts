@@ -1,6 +1,7 @@
 import {Body, Controller, Get, Post, Query, Route, Tags} from "tsoa";
 import Questions, {IQuestion} from "../models/question";
-import Users, {IStudent, Student} from "../models/users";
+import {IStudent, Student} from "../models/users";
+import generateQuestions from "../workers/questionGeneration";
 
 @Route("questions")
 @Tags("Questions")
@@ -12,7 +13,7 @@ export class QuestionsController extends Controller {
         @Query() email: string
     ): Promise<number> {
         // Caută studentul pe baza emailului
-        const student = await Users.findOne({email: email}) as IStudent;
+        const student = await Student.findOne({email: email}) as IStudent;
         if (!student) {
             this.setStatus(404);
             return 0; // sau orice altă gestionare a erorii
@@ -114,6 +115,11 @@ export class QuestionsController extends Controller {
         await student.save();
 
         return results;
+    }
+
+    @Post("startGeneration")
+    public async startGeneration(): Promise<void> {
+        generateQuestions();
     }
 
 }

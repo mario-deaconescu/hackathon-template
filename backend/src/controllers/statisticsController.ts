@@ -28,8 +28,8 @@ type StatisticsResponse = {
 @Tags("Statistics")
 export class StatisticsController extends Controller {
     @Get("getUserStatistics")
-    public async getUserStatistics(@Query() email: string): Promise<StatisticsResponse | void> {
-        const student = await Student.findOne({email: email});
+    public async getUserStatistics(@Query() id: string): Promise<StatisticsResponse | void> {
+        const student = await Student.findOne({_id: id});
         if (!student) {
             this.setStatus(404);
             return;
@@ -70,7 +70,7 @@ export class StatisticsController extends Controller {
 
             if (skillStat.chapters.length > 0) {
                 skillStatistics.push(skillStat);
-                overallTotalCorrect  += skillStat.totalCorrect;
+                overallTotalCorrect += skillStat.totalCorrect;
                 overallTotalQuestions += skillStat.totalQuestions;
             }
 

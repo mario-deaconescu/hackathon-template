@@ -23,11 +23,13 @@ export class AuthController extends Controller {
     public async login(@Body() model: UserLoginModel): Promise<IUser | null> {
         console.log(model);
         const user = await Users.findOne({email: model.email});
+        console.log(user);
         if (!user) {
             this.setStatus(401);
             return null;
         }
         const isValidPassword = await user.isValidPassword(model.password);
+        console.log(isValidPassword);
         if (!isValidPassword) {
             this.setStatus(401);
             return null;

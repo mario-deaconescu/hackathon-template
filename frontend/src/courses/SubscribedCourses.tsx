@@ -24,8 +24,8 @@ const SubscribedCourses = () => {
             <div className="flex flex-wrap gap-4 w-full">
                 {
                     myCourses?.map((course) => (
-                        <Link to={`/courses/${course._id}`} className="w-full">
-                            <Card key={course.name} className="p-4 w-full">
+                        <Link key={course.name} to={`/courses/${course._id}`} className="w-full">
+                            <Card className="p-4 w-full">
                                 <CardHeader>
                                     <h3 className="w-full flex flex-row flex-wrap text-3xl">
                                         <span className="mr-3"> {course.name} </span>

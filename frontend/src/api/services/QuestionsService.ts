@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { IQuestion } from '../models/IQuestion';
+import type { Omit_IQuestion__id_ } from '../models/Omit_IQuestion__id_';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -53,7 +54,7 @@ export class QuestionsService {
      * @throws ApiError
      */
     public static createQuestion(
-        requestBody: IQuestion,
+        requestBody: Omit_IQuestion__id_,
     ): CancelablePromise<IQuestion> {
         return __request(OpenAPI, {
             method: 'POST',

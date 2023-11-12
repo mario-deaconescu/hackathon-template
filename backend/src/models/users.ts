@@ -13,6 +13,7 @@ export interface UserLoginModel {
 }
 
 export interface IUser {
+    _id: string;
     name: string;
     email: string;
     password: string;
@@ -103,7 +104,7 @@ const studentsSchema = new Schema<IStudent, StudentModel, IUserMethods>({
 
 const teachersSchema = new Schema<ITeacher, TeacherModel, IUserMethods>({});
 
-const recruitersSchema = new Schema<IRecruiter, UserModel, IUserMethods>({});
+const recruitersSchema = new Schema<IRecruiter, RecruiterModel, IUserMethods>({});
 
 usersSchema.pre(
     'save',

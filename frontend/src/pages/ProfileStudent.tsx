@@ -3,6 +3,7 @@ import {ChapterStatistics, SkillStatistics, StatisticsResponse, StatisticsServic
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store.tsx";
 import {Accordion, AccordionItem, Avatar, Progress} from "@nextui-org/react";
+import {useParams} from "react-router-dom";
 
 
 function getColor(percentage: number) {
@@ -11,16 +12,34 @@ function getColor(percentage: number) {
     return "danger";
 }
 
-export default function ProfileStudent() {
+const formatPercentage = (percentage: number) => {
+    return `${Math.round(percentage * 100)}%`;
+}
+
+type Props = {
+    fromRoute?: boolean
+}
+
+export default function ProfileStudent({fromRoute}: Props) {
     const [statistics, setStatistics] = useState<StatisticsResponse | null>(null);
     const currentUser = useSelector((state: RootState) => state.user.user);
+    const params = useParams();
     useEffect(() => {
-        if (currentUser === null)
+        if (currentUser === null && !fromRoute)
             return;
-        StatisticsService.getUserStatistics(currentUser.email).then((response) => {
-            setStatistics(response);
-            console.log(response);
-        });
+        if (!fromRoute && currentUser) {
+            StatisticsService.getUserStatistics(currentUser._id).then((response) => {
+                setStatistics(response);
+                console.log(response);
+            });
+        } else {
+            const id = params['id'];
+            if (!id) return;
+            StatisticsService.getUserStatistics(id).then((response) => {
+                setStatistics(response);
+                console.log(response);
+            });
+        }
     }, [currentUser]);
 
     function returnChapter(chapter: ChapterStatistics) {
@@ -33,11 +52,11 @@ export default function ProfileStudent() {
                         completed questions: {chapter.correct}</div>
                     <div
                         className="basis-1/2 text-center border border-slate-600 border-e-medium p-2 bg-slate-800">Average
-                        percentage: {chapter.correct / chapter.total * 100}%
+                        percentage: {formatPercentage(chapter.correct / chapter.total)}
                     </div>
                 </div>
                 <Progress size="md" color={getColor(chapter.correct / chapter.total)} aria-label="Loading..."
-                          value={chapter.correct / chapter.total}/>
+                          value={chapter.correct / chapter.total * 100}/>
             </div>
         );
     }
@@ -67,11 +86,11 @@ export default function ProfileStudent() {
                         completed questions: {skill.totalCorrect}</div>
                     <div
                         className="basis-1/2 text-center border border-slate-600 border-e-medium p-2 bg-slate-800">Average
-                        percentage: {skill.totalCorrect / skill.totalQuestions * 100}%
+                        percentage: {formatPercentage(skill.totalCorrect / skill.totalQuestions)}
                     </div>
                 </div>
                 <Progress size="md" color={getColor(skill.totalCorrect / skill.totalQuestions)} aria-label="Loading..."
-                          value={skill.totalCorrect / skill.totalQuestions}/>
+                          value={skill.totalCorrect / skill.totalQuestions * 100}/>
                 <Accordion>
                     <AccordionItem key={skill.name} aria-label="Accordion 1" title="Chapters">
                         {
@@ -101,7 +120,7 @@ export default function ProfileStudent() {
                                     completed questions: {statistics.overallTotalCorrect}</div>
                                 <div
                                     className="basis-1/2 text-center border border-slate-600 border-e-medium p-4 bg-slate-700">Average
-                                    percentage: {statistics.overallTotalCorrect / statistics.overallTotalQuestions * 100}%
+                                    percentage: {formatPercentage(statistics.overallTotalCorrect / statistics.overallTotalQuestions)}
                                 </div>
                             </div>
                         </div>

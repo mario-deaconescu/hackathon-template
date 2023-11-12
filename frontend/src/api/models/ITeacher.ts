@@ -4,6 +4,7 @@
 /* eslint-disable */
 
 export type ITeacher = {
+    _id: string;
     name: string;
     email: string;
     password: string;

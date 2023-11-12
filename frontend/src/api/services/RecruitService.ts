@@ -2,27 +2,27 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { StatisticsResponse } from '../models/StatisticsResponse';
+import type { RecruitResult } from '../models/RecruitResult';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class StatisticsService {
+export class RecruitService {
 
     /**
-     * @param id
-     * @returns any Ok
+     * @param query
+     * @returns RecruitResult Ok
      * @throws ApiError
      */
-    public static getUserStatistics(
-        id: string,
-    ): CancelablePromise<StatisticsResponse> {
+    public static getQuery(
+        query: string,
+    ): CancelablePromise<RecruitResult> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/statistics/getUserStatistics',
+            url: '/recruit/query',
             query: {
-                'id': id,
+                'query': query,
             },
         });
     }

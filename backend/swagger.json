@@ -8,6 +8,9 @@
 		"schemas": {
 			"IUser": {
 				"properties": {
+					"_id": {
+						"type": "string"
+					},
 					"name": {
 						"type": "string"
 					},
@@ -28,6 +31,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"name",
 					"email",
 					"password",
@@ -55,6 +59,9 @@
 			},
 			"IStudent": {
 				"properties": {
+					"_id": {
+						"type": "string"
+					},
 					"name": {
 						"type": "string"
 					},
@@ -108,6 +115,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"name",
 					"email",
 					"password",
@@ -142,6 +150,9 @@
 			},
 			"ITeacher": {
 				"properties": {
+					"_id": {
+						"type": "string"
+					},
 					"name": {
 						"type": "string"
 					},
@@ -168,6 +179,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"name",
 					"email",
 					"password",
@@ -313,38 +325,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"IQuestion": {
-				"properties": {
-					"_id": {
-						"type": "string"
-					},
-					"chapter": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"answers": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"correctAnswer": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"_id",
-					"chapter",
-					"description",
-					"answers",
-					"correctAnswer"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"ISkill": {
 				"properties": {
 					"name": {
@@ -436,6 +416,97 @@
 					"skillStatistics"
 				],
 				"type": "object"
+			},
+			"RecruitResult": {
+				"properties": {
+					"candidates": {
+						"items": {
+							"properties": {
+								"desirability": {
+									"type": "number",
+									"format": "double"
+								},
+								"student": {
+									"$ref": "#/components/schemas/IStudent"
+								}
+							},
+							"required": [
+								"desirability",
+								"student"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"candidates"
+				],
+				"type": "object"
+			},
+			"IQuestion": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"chapter": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"answers": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"correctAnswer": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"_id",
+					"chapter",
+					"description",
+					"answers",
+					"correctAnswer"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_IQuestion.Exclude_keyofIQuestion._id__": {
+				"properties": {
+					"chapter": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"answers": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"correctAnswer": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"chapter",
+					"description",
+					"answers",
+					"correctAnswer"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_IQuestion._id_": {
+				"$ref": "#/components/schemas/Pick_IQuestion.Exclude_keyofIQuestion._id__",
+				"description": "Construct a type with the properties of T except for those in type K."
 			}
 		},
 		"securitySchemes": {}
@@ -918,6 +989,174 @@
 				]
 			}
 		},
+		"/skills/create": {
+			"post": {
+				"operationId": "CreateSkill",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ISkill"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ISkill"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/skills/all": {
+			"get": {
+				"operationId": "GetAllSkills",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ISkill"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/skills/{skillName}": {
+			"get": {
+				"operationId": "GetChapters",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"type": "string"
+											},
+											"type": "array"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Skills"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "skillName",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/statistics/getUserStatistics": {
+			"get": {
+				"operationId": "GetUserStatistics",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/StatisticsResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Statistics"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/recruit/query": {
+			"get": {
+				"operationId": "GetQuery",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RecruitResult"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Recruit"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/questions/totalQuestions": {
 			"get": {
 				"operationId": "GetTotalQuestions",
@@ -1027,7 +1266,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IQuestion"
+								"$ref": "#/components/schemas/Omit_IQuestion._id_"
 							}
 						}
 					}
@@ -1165,141 +1404,19 @@
 				}
 			}
 		},
-		"/skills/create": {
+		"/questions/startGeneration": {
 			"post": {
-				"operationId": "CreateSkill",
+				"operationId": "StartGeneration",
 				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/ISkill"
-										},
-										{}
-									]
-								}
-							}
-						}
+					"204": {
+						"description": "No content"
 					}
 				},
 				"tags": [
-					"Skills"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ISkill"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/skills/all": {
-			"get": {
-				"operationId": "GetAllSkills",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ISkill"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Skills"
+					"Questions"
 				],
 				"security": [],
 				"parameters": []
-			}
-		},
-		"/skills/{skillName}": {
-			"get": {
-				"operationId": "GetChapters",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"items": {
-												"type": "string"
-											},
-											"type": "array"
-										},
-										{}
-									]
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Skills"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "skillName",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/statistics/getUserStatistics": {
-			"get": {
-				"operationId": "GetUserStatistics",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/StatisticsResponse"
-										},
-										{}
-									]
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Statistics"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "email",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
 			}
 		}
 	},

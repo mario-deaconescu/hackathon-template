@@ -11,6 +11,26 @@ import { request as __request } from '../core/request';
 export class QuestionsService {
 
     /**
+     * @param chapters
+     * @param email
+     * @returns number Ok
+     * @throws ApiError
+     */
+    public static getTotalQuestions(
+        chapters: Array<string>,
+        email: string,
+    ): CancelablePromise<number> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/questions/totalQuestions',
+            query: {
+                'chapters': chapters,
+                'email': email,
+            },
+        });
+    }
+
+    /**
      * @param questionId
      * @returns any Ok
      * @throws ApiError

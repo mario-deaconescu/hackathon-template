@@ -25,12 +25,19 @@ export interface IStudent extends IUser {
         id: string,
         date: Date,
     }[];
-    totalQuestions: number;
+    // totalQuestions: number;
+    totalQuestions: {
+        [chapter: string]: number;
+    };
     subscribedCourses: string[];
 }
 
 export interface ITeacher extends IUser {
     courses: string[];
+}
+
+export interface IRecruiter extends IUser {
+
 }
 
 export interface IUserMethods {
@@ -40,6 +47,7 @@ export interface IUserMethods {
 type UserModel = Model<IUser, {}, IUserMethods>;
 type StudentModel = Model<IStudent, {}, IUserMethods>;
 type TeacherModel = Model<ITeacher, {}, IUserMethods>;
+type RecruiterModel = Model<IRecruiter, {}, IUserMethods>;
 
 
 const usersSchema = new Schema<IUser, UserModel, IUserMethods>({
@@ -79,9 +87,13 @@ const studentsSchema = new Schema<IStudent, StudentModel, IUserMethods>({
         }],
         default: [],
     },
+    // totalQuestions: {
+    //     type: Number,
+    //     default: 0,
+    // },
     totalQuestions: {
-        type: Number,
-        default: 0,
+        type: Object,
+        default: {}
     },
     subscribedCourses: {
         type: [String],
@@ -90,6 +102,8 @@ const studentsSchema = new Schema<IStudent, StudentModel, IUserMethods>({
 });
 
 const teachersSchema = new Schema<ITeacher, TeacherModel, IUserMethods>({});
+
+const recruitersSchema = new Schema<IRecruiter, UserModel, IUserMethods>({});
 
 usersSchema.pre(
     'save',
@@ -110,6 +124,7 @@ const User = model<IUser, UserModel>('User', usersSchema);
 
 const Student = User.discriminator<IStudent, StudentModel>('Student', studentsSchema);
 const Teacher = User.discriminator<ITeacher, TeacherModel>('Teacher', teachersSchema);
+const Recruiter = User.discriminator<IRecruiter, RecruiterModel>('Recruiter', recruitersSchema);
 
 export default User;
-export {Student, Teacher};
+export {Student, Teacher, Recruiter};

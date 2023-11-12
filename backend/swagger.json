@@ -93,8 +93,12 @@
 						"type": "array"
 					},
 					"totalQuestions": {
-						"type": "number",
-						"format": "double"
+						"properties": {},
+						"additionalProperties": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "object"
 					},
 					"subscribedCourses": {
 						"items": {
@@ -198,8 +202,54 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"CourseWithSubscribers": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"teacher": {
+						"$ref": "#/components/schemas/ITeacher"
+					},
+					"name": {
+						"type": "string"
+					},
+					"chapters": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"content": {
+						"type": "string"
+					},
+					"questions": {
+						"items": {
+							"$ref": "#/components/schemas/ICourseQuestion"
+						},
+						"type": "array"
+					},
+					"subscribers": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"_id",
+					"teacher",
+					"name",
+					"chapters",
+					"content",
+					"questions",
+					"subscribers"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ICourse": {
 				"properties": {
+					"_id": {
+						"type": "string"
+					},
 					"teacher": {
 						"$ref": "#/components/schemas/ITeacher"
 					},
@@ -223,6 +273,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"teacher",
 					"name",
 					"chapters",
@@ -234,6 +285,9 @@
 			},
 			"CourseCreateModel": {
 				"properties": {
+					"name": {
+						"type": "string"
+					},
 					"content": {
 						"type": "string"
 					},
@@ -251,6 +305,7 @@
 					}
 				},
 				"required": [
+					"name",
 					"content",
 					"chapters",
 					"questions"
@@ -308,6 +363,79 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ChapterStatistics": {
+				"properties": {
+					"total": {
+						"type": "number",
+						"format": "double"
+					},
+					"correct": {
+						"type": "number",
+						"format": "double"
+					},
+					"chapter": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"total",
+					"correct",
+					"chapter"
+				],
+				"type": "object"
+			},
+			"SkillStatistics": {
+				"properties": {
+					"totalQuestions": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalCorrect": {
+						"type": "number",
+						"format": "double"
+					},
+					"chapters": {
+						"items": {
+							"$ref": "#/components/schemas/ChapterStatistics"
+						},
+						"type": "array"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"totalQuestions",
+					"totalCorrect",
+					"chapters",
+					"name"
+				],
+				"type": "object"
+			},
+			"StatisticsResponse": {
+				"properties": {
+					"overallTotalQuestions": {
+						"type": "number",
+						"format": "double"
+					},
+					"overallTotalCorrect": {
+						"type": "number",
+						"format": "double"
+					},
+					"skillStatistics": {
+						"items": {
+							"$ref": "#/components/schemas/SkillStatistics"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"overallTotalQuestions",
+					"overallTotalCorrect",
+					"skillStatistics"
+				],
+				"type": "object"
 			}
 		},
 		"securitySchemes": {}
@@ -429,6 +557,43 @@
 				}
 			}
 		},
+		"/auth/signupRecruiter": {
+			"post": {
+				"operationId": "SignupRecruiter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IUser"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserCreateModel"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/auth/signupTeacher": {
 			"post": {
 				"operationId": "SignupTeacher",
@@ -522,7 +687,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/ICourse"
+										"$ref": "#/components/schemas/CourseWithSubscribers"
 									},
 									"type": "array"
 								}
@@ -546,19 +711,21 @@
 				]
 			}
 		},
-		"/courses/find": {
+		"/courses/get/{id}": {
 			"get": {
-				"operationId": "Find",
+				"operationId": "GetCourse",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ICourse"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/CourseWithSubscribers"
+										},
+										{}
+									]
 								}
 							}
 						}
@@ -570,17 +737,105 @@
 				"security": [],
 				"parameters": [
 					{
-						"in": "query",
-						"name": "chapters",
+						"in": "path",
+						"name": "id",
 						"required": true,
 						"schema": {
-							"type": "array",
-							"items": {
-								"type": "string"
-							}
+							"type": "string"
 						}
 					}
 				]
+			}
+		},
+		"/courses/find": {
+			"post": {
+				"operationId": "Find",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CourseWithSubscribers"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Course"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"chapters": {
+										"items": {
+											"type": "string"
+										},
+										"type": "array"
+									}
+								},
+								"required": [
+									"chapters"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/courses/enroll": {
+			"post": {
+				"operationId": "Enroll",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"tags": [
+					"Course"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "email",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"courses": {
+										"items": {
+											"type": "string"
+										},
+										"type": "array"
+									}
+								},
+								"required": [
+									"courses"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/courses/create": {
@@ -627,6 +882,40 @@
 						}
 					}
 				}
+			}
+		},
+		"/courses/myCourses": {
+			"get": {
+				"operationId": "MyCourses",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CourseWithSubscribers"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Course"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "email",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		},
 		"/questions/totalQuestions": {
@@ -969,6 +1258,42 @@
 					{
 						"in": "path",
 						"name": "skillName",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/statistics/getUserStatistics": {
+			"get": {
+				"operationId": "GetUserStatistics",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/StatisticsResponse"
+										},
+										{}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Statistics"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "email",
 						"required": true,
 						"schema": {
 							"type": "string"

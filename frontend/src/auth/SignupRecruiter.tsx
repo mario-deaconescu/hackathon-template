@@ -1,20 +1,19 @@
 import {Button, Card, CardBody, CardHeader, Input} from "@nextui-org/react";
-import {useForm} from "react-hook-form";
-import {RootState, useAppDispatch} from "../redux/store.tsx";
-import {login, signOut} from "../redux/userSlice.ts";
 import {useSelector} from "react-redux";
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import {RootState, useAppDispatch} from "../redux/store.tsx";
+import {useForm} from "react-hook-form";
+import {AuthService} from "../api";
+import {signUpRecruiter} from "../redux/userSlice.ts";
 
 interface FormValues {
     email: string
     password: string
+    name: string
 }
 
-const Login = () => {
+const SignupRecruiter = () => {
     const loadingUser = useSelector((state: RootState) => state.user.isLoading);
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -22,36 +21,46 @@ const Login = () => {
     } = useForm<FormValues>({
         mode: "onTouched"
     });
-    const submitForm = async (values: FormValues) => {
-        await dispatch(signOut());
-        const response = await dispatch(login({
+    const submitForm = (values: FormValues) => {
+        dispatch(signUpRecruiter({
             email: values.email,
-            password: values.password
+            password: values.password,
+            name: values.name
         }));
-        if (response.meta.requestStatus === 'fulfilled') {
-            navigate('/');
+    }
+    const emailValidate = async (email: string) => {
+        const response = await AuthService.userExists(email);
+        if (response) {
+            return 'Email already exists';
+        } else {
+            return true;
         }
     }
-
-    useEffect(() => {
-        console.log(errors);
-    });
-
     return (
-        <Card className="p-5 w-full lg:w-1/2 h-fit">
+        <Card className="p-5 w-full h-fit">
             <CardHeader>
                 <h1 className="text-4xl font-medium justify-center">
-                    Login
+                    Sign Up as Recruiter
                 </h1>
             </CardHeader>
             <CardBody>
                 <form className="flex flex-col gap-4 w-full">
+                    <Input type="text" {...register("name", {
+                        required: "Name is required",
+                        minLength: {
+                            value: 3,
+                            message: "Name must be at least 3 characters",
+                        },
+                    })} placeholder="Name"
+                           isInvalid={errors.name !== undefined}
+                           errorMessage={errors.name?.message}/>
                     <Input type="email" {...register("email", {
                         required: "Email is required",
                         pattern: {
                             value: /\S+@\S+\.\S+/,
                             message: "Invalid email address",
                         },
+                        validate: emailValidate,
                     })} placeholder="Email"
                            isInvalid={errors.email !== undefined}
                            errorMessage={errors.email?.message}/>
@@ -62,7 +71,7 @@ const Login = () => {
                            errorMessage={errors.password?.message}/>
                     <Button color="primary" onClick={handleSubmit(submitForm)} isLoading={loadingUser}
                             isDisabled={!isValid}>
-                        Login
+                        Submit
                     </Button>
                 </form>
             </CardBody>
@@ -70,4 +79,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignupRecruiter;

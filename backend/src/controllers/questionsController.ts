@@ -1,7 +1,6 @@
-import { Body, Query, Controller, Post, Get, Request, Route, Security, Tags } from "tsoa";
-import Questions, { IQuestion } from "../models/question";
-import Users, { Student, IStudent, IUser } from "../models/users";
-import { JwtRequest } from "../../authentication";
+import {Body, Controller, Get, Post, Query, Route, Tags} from "tsoa";
+import Questions, {IQuestion} from "../models/question";
+import Users, {IStudent, Student} from "../models/users";
 
 @Route("questions")
 @Tags("Questions")
@@ -13,7 +12,7 @@ export class QuestionsController extends Controller {
         @Query() email: string
     ): Promise<number> {
         // Caută studentul pe baza emailului
-        const student = await Users.findOne({ email: email }) as IStudent;
+        const student = await Users.findOne({email: email}) as IStudent;
         if (!student) {
             this.setStatus(404);
             return 0; // sau orice altă gestionare a erorii
@@ -24,8 +23,8 @@ export class QuestionsController extends Controller {
 
         // Numără întrebările care nu sunt în completedQuestions
         const totalQuestions = await Questions.countDocuments({
-            chapter: { $in: chapters },
-            _id: { $nin: completedQuestionIds }
+            chapter: {$in: chapters},
+            _id: {$nin: completedQuestionIds}
         });
 
         return totalQuestions;
@@ -42,7 +41,7 @@ export class QuestionsController extends Controller {
     }
 
     @Post("create")
-    public async createQuestion(@Body() question: IQuestion): Promise<IQuestion | void> {
+    public async createQuestion(@Body() question: Omit<IQuestion, '_id'>): Promise<IQuestion | void> {
         const newQuestion = new Questions(question);
         const savedQuestion = await newQuestion.save();
         if (!savedQuestion) {
@@ -56,9 +55,9 @@ export class QuestionsController extends Controller {
     @Post("randomQuiz")
     public async getRandomQuestions(@Body() body: { chapters: string[], numberOfQuestions: number }): Promise<IQuestion[]> {
         const questions = await Questions.find({
-            chapter: { $in: body.chapters }
+            chapter: {$in: body.chapters}
         });
-        
+
         // Amestecă și selectează un număr aleatoriu de întrebări
         const shuffledQuestions = questions.sort(() => 0.5 - Math.random());
         return shuffledQuestions.slice(0, body.numberOfQuestions);
@@ -67,8 +66,6 @@ export class QuestionsController extends Controller {
 
     }
 
-   
-    
 
     @Post("responseQuiz")
     public async responseQuiz(
@@ -77,13 +74,12 @@ export class QuestionsController extends Controller {
         let results = [];
 
         // Obține studentul bazat pe email
-        const student = await Student.findOne({ email: body.email });
+        const student = await Student.findOne({email: body.email});
         if (!student) {
-            this.setStatus(404); // sau orice altă gestionare a erorii
+            this.setStatus(404);
             return [];
         }
 
-        student.totalQuestions += body.responses.length;
         for (const response of body.responses) {
             const question = await Questions.findById(response.questionId);
 
@@ -95,6 +91,15 @@ export class QuestionsController extends Controller {
                     correctAnswer: question.correctAnswer
                 });
 
+                // Inițializează contorul pentru capitol dacă nu există
+                const chapter = question.chapter;
+                if (!student.totalQuestions[chapter]) {
+                    student.totalQuestions[chapter] = 0;
+                }
+
+                // Actualizează contorul pentru capitol
+                student.totalQuestions[chapter]++;
+
                 // Adaugă la completedQuestions dacă răspunsul este corect
                 if (isCorrect) {
                     student.completedQuestions.push({id: response.questionId, date: new Date()});
@@ -102,11 +107,13 @@ export class QuestionsController extends Controller {
             }
         }
 
+        // Marchează câmpul totalQuestions ca fiind modificat
+        student.markModified('totalQuestions');
+
         // Salvează modificările făcute asupra studentului
         await student.save();
 
-
-
         return results;
     }
+
 }

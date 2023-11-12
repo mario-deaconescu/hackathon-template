@@ -61,6 +61,22 @@ export class AuthService {
      * @returns any Ok
      * @throws ApiError
      */
+    public static signupRecruiter(
+        requestBody: UserCreateModel,
+    ): CancelablePromise<IUser> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/auth/signupRecruiter',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+
+    /**
+     * @param requestBody
+     * @returns any Ok
+     * @throws ApiError
+     */
     public static signupTeacher(
         requestBody: UserCreateModel,
     ): CancelablePromise<IUser> {

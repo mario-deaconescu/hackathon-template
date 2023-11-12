@@ -644,13 +644,13 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/questions/totalQuestions',
+        app.post('/questions/totalQuestions',
             ...(fetchMiddlewares<RequestHandler>(QuestionsController)),
             ...(fetchMiddlewares<RequestHandler>(QuestionsController.prototype.getTotalQuestions)),
 
             function QuestionsController_getTotalQuestions(request: any, response: any, next: any) {
             const args = {
-                    chapters: {"in":"query","name":"chapters","required":true,"dataType":"array","array":{"dataType":"string"}},
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"chapters":{"dataType":"array","array":{"dataType":"string"},"required":true}}},
                     email: {"in":"query","name":"email","required":true,"dataType":"string"},
             };
 

@@ -7,9 +7,11 @@ import generateQuestions from "../workers/questionGeneration";
 @Tags("Questions")
 export class QuestionsController extends Controller {
 
-    @Get("totalQuestions")
+    @Post("totalQuestions")
     public async getTotalQuestions(
-        @Query() chapters: string[],
+        @Body() body: {
+            chapters: string[]
+        },
         @Query() email: string
     ): Promise<number> {
         // Caută studentul pe baza emailului
@@ -24,7 +26,7 @@ export class QuestionsController extends Controller {
 
         // Numără întrebările care nu sunt în completedQuestions
         const totalQuestions = await Questions.countDocuments({
-            chapter: {$in: chapters},
+            chapter: {$in: body.chapters},
             _id: {$nin: completedQuestionIds}
         });
 

@@ -2,7 +2,7 @@ import {CourseService, CourseWithSubscribers} from "../api";
 import {useEffect, useState} from "react";
 import {Chip, User} from "@nextui-org/react";
 import {useParams} from "react-router-dom";
-
+import parse from "html-react-parser";
 
 const CoursePage = () => {
     const [course, setCourse] = useState<CourseWithSubscribers | null>(null);
@@ -18,8 +18,8 @@ const CoursePage = () => {
     }, [params.id]);
     return (
         <div className={"flex flex-col gap-4 p-5"}>
-            <div className={"flex flex-row gap-4 w-full justify-between"}>
-                <div className={"flex flex-row gap-4 items-center"}>
+            <div className={"flex flex-row gap-4 w-full justify-between flex-wrap"}>
+                <div className={"flex flex-row gap-4 items-center flex-wrap"}>
                     <h1 className={"text-4xl font-medium"}>{course?.name}</h1>
                     <div className="flex flex-row items-center flex-wrap">
                         {
@@ -39,7 +39,7 @@ const CoursePage = () => {
                 </div>
             </div>
             <div>
-                {course?.content}
+                {parse(course?.content ?? '')}
             </div>
         </div>
     );

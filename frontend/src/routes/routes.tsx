@@ -100,13 +100,13 @@ const rawRoutes: ExtendedRouteObject[] = [
                 id: 'Welcome',
                 path: 'welcome',
                 element: <Welcome/>
+            },
+            {
+                path: 'home',
+                element: <HomePage/>,
             }
         ],
     },
-    {
-        path: '/home',
-        element: <HomePage/>,
-    }
 ];
 
 const buildRoutes = (route: ExtendedRouteObject): ExtendedRouteObject => {

@@ -79,11 +79,11 @@ const FindCourses = () => {
     }, []);
     return (
         <div>
-            <div className="flex flex-row gap-4 justify-between w-full mb-3">
-                <h1 className="text-4xl font-medium justify-center mb-5 flex-grow">
+            <div className="flex flex-row gap-4 justify-between w-full mb-3 flex-wrap">
+                <h1 className="text-4xl font-medium justify-center flex-grow">
                     Find Courses
                 </h1>
-                <div className="w-1/2 flex flex-row items-center gap-3 justify-end">
+                <div className="w-full lg:w-1/2 flex flex-row items-center gap-3 justify-start">
                     <Button color="primary" size="lg" isDisabled={Array.from(selectedKeys).length === 0}
                             isLoading={enrolling} onClick={enroll}>Enroll</Button>
                     <Select selectionMode="multiple" placeholder="Chapters" onSelectionChange={setChapters}

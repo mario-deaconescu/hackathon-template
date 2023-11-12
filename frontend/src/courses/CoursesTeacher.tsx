@@ -5,11 +5,13 @@ import {useSelector} from "react-redux";
 import {RootState} from "../redux/store.tsx";
 import {useEffect, useState} from "react";
 import {CourseService, CourseWithSubscribers} from "../api";
+import {useNavigate} from "react-router-dom";
 
 const CoursesTeacher = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const [myCourses, setMyCourses] = useState<CourseWithSubscribers[]>([]);
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
+    const navigate = useNavigate();
     useEffect(() => {
         if (currentUser === null) {
             return;
@@ -33,7 +35,8 @@ const CoursesTeacher = () => {
                 <div className="flex flex-wrap gap-4 flex-col p-5">
                     {
                         myCourses.map((course) => (
-                            <Card key={course.name} className="p-4">
+                            <Card isPressable={true} key={course.name} className="p-4"
+                                  onClick={() => navigate(`/courses/${course._id}`)}>
                                 <CardHeader>
                                     <h3 className="w-full flex flex-row flex-wrap text-3xl">
                                         <span className="mr-3"> {course.name} </span>

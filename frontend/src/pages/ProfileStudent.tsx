@@ -92,7 +92,7 @@ export default function ProfileStudent({fromRoute}: Props) {
         <div className="bg-slate-950 pt-5 w-screen overflow-hidden">
             {statistics && currentUser &&
                 <>
-                    <div className="flex">
+                    <div className="flex p-5">
                         <div className="flex-none aspect-square">
                             <Avatar isBordered radius="md" className="aspect-square w-full h-full"
                                     src="https://i.pravatar.cc/150?u=a04258a2462d826712d"/>

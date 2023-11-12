@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../redux/store.tsx";
 import {Accordion, AccordionItem, Avatar, Progress} from "@nextui-org/react";
 import {useParams} from "react-router-dom";
+import Calendar from "../components/calendar.tsx";
 
 
 function getColor(percentage: number) {
@@ -62,21 +63,6 @@ export default function ProfileStudent({fromRoute}: Props) {
     }
 
     function returnSkill(skill: SkillStatistics) {
-        /*const data = {
-            percentage:0.7,
-            skills: [
-                {
-                    name: "Informatica",
-                    chapters: [
-                        {
-                            id: 101
-                            name: "Poo",
-                            percetange: 0.7
-                        }
-                    ]
-                }
-            ]
-        }*/
         return (
             <div className="m-5 border-medium rounded-lg bg-slate-700 lg: w-[80%] mx-auto" key={skill.name}>
                 <h3 className="text-center p-4 text-3xl">{skill.name}</h3>
@@ -133,6 +119,7 @@ export default function ProfileStudent({fromRoute}: Props) {
                     </div>
                 </>
             }
+            <Calendar data={[0, 1, 0, 3, 5, 2, 0, 0, 0, 0, 20, 50, 20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1]}/>
         </div>
     )
 
